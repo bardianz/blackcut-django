@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% load jalali_tags %}
+{% load static %}
+
+
+{% block content %}
+
+
+
+
+<div class="d-flex justify-content-center mb-4">
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 px-2">
+
+        <div class="col-12 text-center mb-3">
+
+            <h4 dir="auto">
+                رزرو نوبت جدید
+            </h4>
+
+        </div>
+
+        <div class="col-12">
+            <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+            </div>
+
+            {% if error_message %}
+            <div class="alert alert-danger"> {{error_message}} </div>
+            {% endif %}
+            <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
+            <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
+        </div>
+            <div class="col-12">
+
+                <form method="POST" class="row"> {% csrf_token %}
+
+
+                    <div class="col-md-6 mb-3">
+                        <label for="id_service" class="form-label">سرویس مورد نظر خود را انتخاب کنید</p>
+                            {{form.service}}
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+                        <div class="col">
+                            <p class="col">تاریخ مورد نظر خود را انتخاب کنید:</p>
+                        </div>
+                        <div class="col "> {{form.date}} </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3  mt-2">
+                        <label for="todayDate"> تاریخ امروز: </label>
+                        <div class="d-flex flex-row bd-highlight mb-3 pt-3"  id="todayDate" >
+                            <div>  {{today_weekday}} </div>
+                            <div class="px-2" dir="rtl">  {{today}} </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- </div> -->
+
+
+                    <div class="d-flex justify-content-center pb-3 mb-3">
+                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+
+                        </div>
+                    </div>
+
+                    
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-warning m-5" id="submit-btn">ثبت و تائید تاریخ</button>
+                        </div>
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+{% block jalali_js_bindings %}
+
+<link rel="stylesheet" href="{% static 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css' %}">
+<script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
+
+{% endblock%}
+
+
+{% block static_js %}
+
+<script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script>
+
+{% endblock%}

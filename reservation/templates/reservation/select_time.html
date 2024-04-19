@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+<div class="d-flex justify-content-center">
+    <div class="col-md-5">
+        <h4 class="mb-4" dir="auto">
+            انتخاب تایم برای تاریخ {{ selected_date }}
+        </h4>
+        <table class="table text-center" dir="rtl">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">#</th> -->
+                    <th scope="col">تایم</th>
+                    <th scope="col">نوبت گرفتن</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in total_time_slots %}
+                <tr>
+                    <!-- <th scope="row">1</th> -->
+                    <td> {{ i.start_time_formatted }}</td>
+                    {%if i.status == "Available" %}
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="time" value="{{ i.start_time_formatted }}">
+                            <button type="submit" value="Submit" class="btn btn-success btn-sm">رزرو</button>
+                        </form>
+                    </td>
+                    {%elif i.status == "Reserved" %}
+                    <td class="bg-danger">
+                        این تایم رزرو شده
+                    </td>
+                    {% endif %}
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
