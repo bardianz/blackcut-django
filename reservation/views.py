@@ -26,7 +26,9 @@ def choose_date_view(request):
     today = jalali_numerical_convertor(current_date)
     days_list = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه", "یک‌شنبه"]
     today_weekday = days_list[current_datetime.weekday()]
+
     print(today)
+
     form = DatePickerForm()  
 
     context = {
