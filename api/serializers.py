@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from reservation.models import Appointment
+from shop.models import Product
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -9,4 +10,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id','user', 'service', 'date', 'start_time', 'timeslot', 'is_active', 'is_done', 'is_paid', 'is_canceled', 'jalali_reservation_date', 'user_identifier']
+        fields = ['id', 'user', 'service', 'date', 'start_time', 'timeslot', 'is_active', 'is_done', 'is_paid',
+                  'is_canceled', 'jalali_reservation_date', 'user_identifier']
+
+
+class ProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"

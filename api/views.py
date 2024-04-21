@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from reservation.models import Appointment
 from shop.models import Product
-from .serializers import AppointmentSerializer
+from .serializers import AppointmentSerializer,ProductsSerializer
 
 
 class ActiveAppointments(APIView):
@@ -16,11 +16,11 @@ class ActiveAppointments(APIView):
 
 
 class AllProducts(APIView):
-    queryset = Product.objects.all()
+    def get_queryset(self):
+        return Product.objects.all()
 
     def get(self, request):
-        products = self.queryset
-        all_appointments = list(products.values())
-        return Response(all_appointments)
-
+        products = self.get_queryset()
+        serializer = ProductsSerializer(products, many=True)
+        return Response(serializer.data)
 
