@@ -7,7 +7,7 @@ from .serializers import AppointmentSerializer,ProductsSerializer
 
 class ActiveAppointments(APIView):
     def get_queryset(self):
-        return Appointment.objects.filter(is_active=True)
+        return Appointment.objects.filter(is_active=True).order_by('date', 'timeslot__start_time')
 
     def get(self, request):
         appointments = self.get_queryset()
