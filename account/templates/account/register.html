@@ -61,33 +61,31 @@
     ثبت نام:
 </p>
 
-            <form method="post" class="row g-3" dir="rtl">
+
+                
+                <form method="post" class="row g-3" dir="rtl">
                 {% csrf_token %}
                 <div class="col-md-12">
                     <p class="text-warning">پر کردن موارد ستاره دار الزامی است</p>
                 </div>
 
-                <div class="col-md-6">
-                    <label for="inputFirstName" class="form-label">نام</label>
-                    <input type="text" class="form-control" name="first_name" id="inputFirstName"
-                        placeholder="First name" aria-label="First name">
-                </div>
-                <div class="col-md-6">
-                    <label for="last_name" class="form-label">نام خانوادگی</label>
-                    <input type="text" class="form-control text-dark" name="last_name" id="last_name"
-                        placeholder="Last name" aria-label="Last name">
-                </div>
-                <div class="col-md-6">
+{#                <div class="col-md-6">#}
+{#                    <label for="inputFirstName" class="form-label">نام</label>#}
+{#                    <input type="text" class="form-control" name="first_name" id="inputFirstName"#}
+{#                        placeholder="First name" aria-label="First name">#}
+{#                </div>#}
+{#                <div class="col-md-6">#}
+{#                    <label for="last_name" class="form-label">نام خانوادگی</label>#}
+{#                    <input type="text" class="form-control text-dark" name="last_name" id="last_name"#}
+{#                        placeholder="Last name" aria-label="Last name">#}
+{#                </div>#}
+                <div class="col-md-12">
                     <label for="username" class="form-label">نام کاربری*</label>
                     <input type="text" class="form-control text-dark" dir="ltr" name="username" maxlength="150"
                         autocapitalize="none" autocomplete="username" autofocus="" required=""
                         aria-describedby="id_username_helptext" id="id_username" required>
                 </div>
-                <div class="col-md-6">
-                    <label for="inputEmail1" class="form-label">ایمیل</label>
-                    <input type="email" class="form-control text-dark" id="inputEmail1" dir="ltr" placeholder="Email">
-                </div>
-
+                    
 
                 <div class="col-md-6">
                     <label for="inputpassword1" class="form-label">رمزعبور*</label>

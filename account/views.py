@@ -55,7 +55,7 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user,backend='django.contrib.auth.backends.ModelBackend')
             return redirect("account:dashboard")
         else:
             messages.error(request, "لطفا با اطلاعات درستی فرم ثبت نام را پر کنید!")
