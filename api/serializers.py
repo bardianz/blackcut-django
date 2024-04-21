@@ -12,7 +12,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = ['id', 'user', 'service', 'date', 'start_time', 'timeslot', 'is_active', 'is_done', 'is_paid',
                   'is_canceled', 'jalali_reservation_date', 'user_identifier']
-
+        ordering = ['date', 'start_time']
 
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
