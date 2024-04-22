@@ -65,7 +65,7 @@ def choose_time_view(request, date, service):
     if request.method == "GET":
 
 
-        all_timeslots = TimeSlot.objects.all()
+        all_timeslots = TimeSlot.objects.order_by("start_time").all()
 
         timeslots = []
 
