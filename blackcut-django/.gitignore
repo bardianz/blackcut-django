@@ -1,0 +1,25 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+
+# Backup files # 
+*.bak 
+
+.idea/
+media/*
+
+account/__pycache__/
+home/__pycache__/
+reservation/__pycache__/
+core/__pycache__/
+reservation/migrations/__pycache__/
+account/migrations/__pycache__/
+home/migrations/__pycache__/
+venv/
+.env
+utils/__pycache__
+db.sqlite3
+db.sqlite3

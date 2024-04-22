@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy
-from utils.jalali_weekday import jalali_weekday_convertor
+from jalali_date import date2jalali
+from utils.persian_date_convertor import persian_date_string_convertor
+
 
 SERVICE_IS_ACTIVE_CHOICES = (
     (True, gettext_lazy("فعال")),
@@ -72,7 +74,10 @@ class Appointment(models.Model):
         super().save(*args, **kwargs)
 
     def jalali_reservation_date(self):
-        return jalali_weekday_convertor(self.date)
+        jalali_date = date2jalali(self.date)
+        print(jalali_date)
+        jalali_string = persian_date_string_convertor(str(jalali_date))
+        return jalali_string
 
     def user_identifier(self):
         if self.user.first_name and self.user.last_name:
@@ -84,7 +89,7 @@ class Appointment(models.Model):
         elif self.user.username:
             return self.user.username
         else:
-            return ""
+            return "Unknown"
 
     def __str__(self):
         return f"{self.user_identifier()}  | {self.jalali_reservation_date()}  |  {self.timeslot}"

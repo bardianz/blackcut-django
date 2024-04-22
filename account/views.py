@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm
 from django.contrib import messages
 from reservation.models import Appointment
+from reservation.utils import convert_to_persian_weekday
 
 
 
@@ -20,12 +21,12 @@ class Dashboard(View):
         if not request.user.is_authenticated:
             return redirect("account:login")
 
-        queryset = Appointment.objects.filter(user=request.user).all()
+        queryset = Appointment.objects.filter(user=request.user).order_by('date').all()
         for appointment in queryset:
             appointment.start_time = str( appointment.timeslot.start_time)[:-3]
-            days_list = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه", "یک‌شنبه"]
-            today_weekday = days_list[appointment.date.weekday()]
-            appointment.day = str(today_weekday)
+            # days_list = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه", "یک‌شنبه"]
+            # today_weekday = days_list[appointment.date.weekday()]
+            appointment.day = str(convert_to_persian_weekday(appointment.date))
             appointment.reserve_id = appointment.id
 
             

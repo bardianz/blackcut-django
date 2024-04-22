@@ -22,60 +22,62 @@
 
         <div class="col-12">
             <div class="col-12">
-            <div class="alert alert-info" role="alert">
-                لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+                <div class="alert alert-info" role="alert">
+                    لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+                </div>
+
+                {% if error_message %}
+                <div class="alert alert-danger"> {{error_message}} </div>
+                {% endif %}
+                <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
+                <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
             </div>
 
-            {% if error_message %}
-            <div class="alert alert-danger"> {{error_message}} </div>
-            {% endif %}
-            <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
-            <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
-        </div>
+
+
             <div class="col-12">
 
-                <form method="POST" class="row"> {% csrf_token %}
+                <div class="col-md-6 mb-3">
+                    <label for="id_service" class="form-label">سرویس مورد نظر خود را انتخاب کنید</p>
+                        <select class="form-select" aria-label="سرویس" id="id_service" onchange="checkService()" aria-placeholder="سرویس">
+                            {% for service in active_services %}
+                            <option value="{{service.id}}">{{service}}</option>
+
+                            {% endfor %}
+
+                        </select>
+                </div>
+
+                <table class="table text-center" dir="rtl">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">#</th> -->
+                            <th scope="col">تایم</th>
+                            <th scope="col">نوبت گرفتن</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for date in dates_list %}
+
+                        <tr>
+                            <td> {{ date.weekday }} {{ date.date|to_jalali:'%Y/%m/%d' }} </td>
+                            <td>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="date" value="{{ date.formatted_date }}">
+                                    <input type="hidden" name="service"  id="serviceInput"  value="">
+                                    <button onclick="checkService()" name="btn-reserve" type="submit"
+                                        value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button>
+                                </form>
+                            </td>
 
 
-                    <div class="col-md-6 mb-3">
-                        <label for="id_service" class="form-label">سرویس مورد نظر خود را انتخاب کنید</p>
-                            {{form.service}}
-                    </div>
 
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-
-                    <div class="col-md-6 mb-3">
-                        <div class="col">
-                            <p class="col">تاریخ مورد نظر خود را انتخاب کنید:</p>
-                        </div>
-                        <div class="col "> {{form.date}} </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3  mt-2">
-                        <label for="todayDate"> تاریخ امروز: </label>
-                        <div class="d-flex flex-row bd-highlight mb-3 pt-3"  id="todayDate" >
-                            <div>  {{today_weekday}} </div>
-                            <div class="px-2" dir="rtl">  {{today}} </div>
-
-                        </div>
-                    </div>
-
-
-                    <!-- </div> -->
-
-
-                    <div class="d-flex justify-content-center pb-3 mb-3">
-                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-
-                        </div>
-                    </div>
-
-                    
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-warning m-5" id="submit-btn">ثبت و تائید تاریخ</button>
-                        </div>
-
-                </form>
 
             </div>
 
