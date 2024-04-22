@@ -105,6 +105,13 @@
 
 {% block static_js %}
 
-<script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script>
+<script>
+    function checkService() {
+        var selectedService = document.getElementById("id_service").value;
+        document.getElementById("serviceInput").value = selectedService;
+    }
+</script>
+
+<!-- <script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script> -->
 
 {% endblock%}
