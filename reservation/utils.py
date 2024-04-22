@@ -13,30 +13,12 @@ def date_generator(days_number:int):
 
 
 
-
 def generate_date_list_with_persian_weekday(dates_list):
     dates_weekday_list = []
     for date in dates_list:
         formatted_date = convert_to_persian_weekday(date)
         dates_weekday_list.append(formatted_date)
     return dates_weekday_list
-
-
-# def persian_weekday_generator(dates_list:list):
-#     persian_weekdays = {
-#         "Monday": "دوشنبه",
-#         "Tuesday": "سه‌شنبه",
-#         "Wednesday": "چهارشنبه",
-#         "Thursday": "پنج‌شنبه",
-#         "Friday": "جمعه",
-#         "Saturday": "شنبه",
-#         "Sunday": "یک‌شنبه"
-#     }
-#     dates_weekday_list = []
-#     for i in dates_list:
-#         formatted_date = persian_weekdays[i.strftime("%A")]
-#         dates_weekday_list.append(formatted_date)
-#     return dates_weekday_list
 
 
 

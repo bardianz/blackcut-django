@@ -24,9 +24,6 @@ class Dashboard(View):
         queryset = Appointment.objects.filter(user=request.user).order_by('date').all()
         for appointment in queryset:
             appointment.start_time = str( appointment.timeslot.start_time)[:-3]
-            # days_list = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه", "یک‌شنبه"]
-            # today_weekday = days_list[appointment.date.weekday()]
-            appointment.day = str(convert_to_persian_weekday(appointment.date))
             appointment.reserve_id = appointment.id
 
             

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy
 from jalali_date import date2jalali
 from utils.persian_date_convertor import persian_date_string_convertor
+from utils.persian_weekday import convert_to_persian_weekday
 
 
 SERVICE_IS_ACTIVE_CHOICES = (
@@ -77,7 +78,8 @@ class Appointment(models.Model):
         jalali_date = date2jalali(self.date)
         print(jalali_date)
         jalali_string = persian_date_string_convertor(str(jalali_date))
-        return jalali_string
+        persian_weekday = convert_to_persian_weekday(self.date)
+        return f"{persian_weekday} {jalali_string}"
 
     def user_identifier(self):
         if self.user.first_name and self.user.last_name:
