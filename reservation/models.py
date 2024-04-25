@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy
 from jalali_date import date2jalali
+
+from shop.models import Product
 from utils.persian_date_convertor import persian_date_string_convertor
 from utils.persian_weekday import convert_to_persian_weekday
 
@@ -58,6 +60,8 @@ class Appointment(models.Model):
     is_done = models.BooleanField(verbose_name="آیا انجام شده است", default=False, blank=True, null=True)
     is_paid = models.BooleanField(verbose_name="آیا پرداخت شده است", default=False, blank=True, null=True)
     is_canceled = models.BooleanField(verbose_name="آیا نوبت لغو شده است؟", default=False, blank=True, null=True)
+    products = models.ManyToManyField(Product,blank=True,verbose_name="محصولات انتخابی")
+
 
     def save(self, *args, **kwargs):
         if self.is_canceled:

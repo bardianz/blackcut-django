@@ -1,13 +1,16 @@
 from django.db import models
-from django.conf import settings
-from pathlib import Path
-
-BASE_DIR = Path(settings.BASE_DIR)
+from PIL import Image
 
 class Product(models.Model):
-    name = models.CharField(max_length=50,verbose_name="تصویر محصول")
-    img = models.ImageField(default=str(BASE_DIR / "static" / "shop" / "no-picture.png") ,upload_to='shop/product/images/', verbose_name="تصویر محصول")
-    quantity = models.IntegerField(default=0 ,verbose_name="تصویر محصول")
+    name = models.CharField(max_length=50, verbose_name="نام محصول")
+    img = models.ImageField(default="shop/no-picture.png", upload_to='shop/product/images/', verbose_name="تصویر محصول")
+    quantity = models.IntegerField(default=0, verbose_name="موجودی محصول")
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.img.path)
+        img.thumbnail((100, 100))
+        img.save(self.img.path)
 
     class Meta:
         verbose_name = "محصول"
