@@ -27,20 +27,20 @@ class AllProducts(APIView):
         return Response(serializer.data)
 
 
-@api_view(['POST'])
-def add_product_to_appointment(request):
-    appointment_id = request.data.get('appointment_id')
-    product_id = request.data.get('product_id')
-    try:
-        appointment = Appointment.objects.get(id=appointment_id)
-        product = Product.objects.get(id=product_id)
-        appointment.products.add(product)
-        appointment.save()
-        return Response({'message': 'Product added successfully'},status=status.HTTP_200_OK)
-    except Appointment.DoesNotExist:
-        return Response({'message': 'Appointment does not exist'},status=status.HTTP_404_NOT_FOUND)
-    except Product.DoesNotExist:
-        return Response({'message': 'Product does not exist'},status=status.HTTP_404_NOT_FOUND)
+class AddProductToAppointment(APIView):
+    def post(self, request):
+        appointment_id = request.data.get('appointment_id')
+        product_id = request.data.get('product_id')
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            product = Product.objects.get(id=product_id)
+            appointment.products.add(product)
+            appointment.save()
+            return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
+        except Appointment.DoesNotExist:
+            return Response({'message': 'Appointment does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        except Product.DoesNotExist:
+            return Response({'message': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 def remove_product_from_appointment(request):
