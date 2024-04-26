@@ -21,8 +21,8 @@ class Dashboard(View):
         if not request.user.is_authenticated:
             return redirect("account:login")
 
-        queryset = Appointment.objects.filter(user=request.user).order_by('date').all()
-        for appointment in queryset:
+        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','date').all()
+        for appointment in all_reservations:
             appointment.start_time = str( appointment.timeslot.start_time)[:-3]
             appointment.reserve_id = appointment.id
 
@@ -30,18 +30,15 @@ class Dashboard(View):
             
 
         active_reservations = []
-        old_reservations = []
-        for appointment in queryset:
+        for appointment in all_reservations:
             if appointment.is_active == True:
                 active_reservations.append(appointment)
-            elif appointment.is_active == False:
-                old_reservations.append(appointment)
+
 
         context = {
             "len_active_reservations": len(active_reservations),
-            "len_all_reservations": len(active_reservations) + len(old_reservations),
-            "active_reservations": active_reservations,
-            "old_reservations": old_reservations,
+            "len_all_reservations": len(all_reservations) ,
+            "all_reservations": all_reservations,
         }
         return render(request, self.template_name, context)
 
