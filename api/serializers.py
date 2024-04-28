@@ -19,7 +19,7 @@ class ProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["name", "img", "quantity", "price"]
+        fields = ["name", "img", "price"]
 
     def get_price(self, obj):
         return format(obj.price, ',')
