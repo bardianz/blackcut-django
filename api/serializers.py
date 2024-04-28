@@ -15,6 +15,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
         ordering = ['date', 'start_time']
 
 class ProductsSerializer(serializers.ModelSerializer):
+    price = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["name", "img", "quantity", "price"]
+
+    def get_price(self, obj):
+        return format(obj.price, ',')
