@@ -1,4 +1,5 @@
 from django.db import models
+
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy
 from jalali_date import date2jalali
@@ -6,6 +7,7 @@ from jalali_date import date2jalali
 from shop.models import Product
 from utils.persian_date_convertor import persian_date_string_convertor
 from utils.persian_weekday import convert_to_persian_weekday
+
 
 
 SERVICE_IS_ACTIVE_CHOICES = (
@@ -57,14 +59,19 @@ class Appointment(models.Model):
     is_done = models.BooleanField(verbose_name="آیا انجام شده است", default=False, blank=True, null=True)
     is_paid = models.BooleanField(verbose_name="آیا پرداخت شده است", default=False, blank=True, null=True)
     is_canceled = models.BooleanField(verbose_name="آیا نوبت لغو شده است؟", default=False, blank=True, null=True)
+    is_expired = models.BooleanField(verbose_name="آیا نوبت منقضی شده است؟", default=False, blank=True, null=True)
     products = models.ManyToManyField(Product,blank=True,verbose_name="محصولات انتخابی")
+
+ 
 
 
     def save(self, *args, **kwargs):
+
         if self.is_canceled:
             self.is_done = False
             self.is_active = False
             self.is_paid = False
+            self.is_expired = True
 
         if self.is_done:
             self.is_active = False
@@ -73,11 +80,11 @@ class Appointment(models.Model):
             self.is_active = False
             self.is_done = True
 
+
         super().save(*args, **kwargs)
 
     def jalali_reservation_date(self):
         jalali_date = date2jalali(self.date)
-        print(jalali_date)
         jalali_string = persian_date_string_convertor(str(jalali_date))
         persian_weekday = convert_to_persian_weekday(self.date)
         return f"{persian_weekday} {jalali_string}"

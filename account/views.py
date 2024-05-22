@@ -23,6 +23,7 @@ class Dashboard(View):
 
         all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','date').all()
         for appointment in all_reservations:
+
             appointment.start_time = str( appointment.timeslot.start_time)[:-3]
             appointment.reserve_id = appointment.id
 
