@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
-# Create your views here.
+from .models import HomePage
 
-class HomePage(TemplateView):
-    template_name = "home/index.html"
+
+
+def home_page_view(request):
+    homepage_data = HomePage.objects.all()
+    context = {'homepage_data': homepage_data}
+    return render(request, 'home/index.html', context)
