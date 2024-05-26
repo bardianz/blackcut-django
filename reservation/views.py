@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Appointment, Service, TimeSlot
 from .utils import date_dict_with_persian_weekday,is_future_date
+from django.contrib import messages
 
 
 @login_required
@@ -55,6 +56,10 @@ def choose_date_view(request):
         else:
             context["error_message"] = "لطفاً تاریخی قبل از امروز را انتخاب نکنید"
 
+    if not request.user.first_name and not request.user.last_name :
+        messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
+        return redirect("account:dashboard")
+        
     return render(request, template_name, context)
 
 

@@ -2,184 +2,201 @@
 
 {% block content %}
 
-    {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 
+
+    <div class="div">
+
+        {% for message in messages %}
         <div class="d-flex justify-content-center">
             <div class="col-md-8 mb-4">
-
-                <div class="row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <a class="btn btn-warning btn-sm card-text" href="{% url 'reserve:select_date' %}"
-                                   role="button">رزرو نوبت جدید</a>
-                            </div>
-                        </div>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <div id="form_errors">
+                        <strong>{{ message }}</strong>
+        
                     </div>
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
-                            </div>
-                        </div>
+                </div>
+
+        </div>
+        </div>
+
+        {% endfor%}
+    </div>
+<div class="d-flex justify-content-center">
+
+    <div class="col-md-8 mb-4">
+
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a class="btn btn-warning btn-sm card-text mx-2" href="{% url 'reserve:select_date' %}"
+                            role="button">رزرو نوبت جدید</a>
+
+                            <a class="btn btn-warning btn-sm card-text mx-2" href="{% url 'account:profile' %}"
+                            role="button">پروفایل</a>
                     </div>
                 </div>
             </div>
-
-        </div>
-
-
-        <div id="all_reservations" class="d-flex justify-content-center">
-        <div class="col-md-8 mb-4">
-            <h5 class="mb-4" dir="auto">لیست نوبتها:</h5>
-
-            {% if all_reservations %}
-                <table class="table table-striped text-center align-middle shadow-lg rounded" dir="rtl">
-                    <thead>
-                    <tr>
-                        <!-- <th scope="col">#</th> -->
-                        <th scope="col">سرویس</th>
-                        <th scope="col">تاریخ</th>
-                        <th scope="col">تایم</th>
-                        <th scope="col">وضعیت</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for i in all_reservations %}
-                        <tr>
-                            <td dir="rtl"> {{ i.service }}</td>
-                            <td dir="ltr">
-                                {{ i.jalali_reservation_date }}
-                            </td>
-                            <td>{{ i.start_time }}</td>
-                            <td>
-                                {% if i.is_active %}
-
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#reservationDetailModal{{ i.id }}">
-                                        جزئیات
-                                    </button>
-                                    <div class="modal fade" id="reservationDetailModal{{ i.id }}"
-                                         data-bs-backdrop="static"
-                                         data-bs-keyboard="false" tabindex="-1"
-                                         aria-labelledby="staticBackdropLabel"
-                                         aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="reservationDetailModalLabel"
-                                                        style="font-family: 'Vazir';">نوبت رزرو شده</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body" dir="rtl">
-
-                                                    <p> تاریخ
-                                                        انتخابی: {{ i.day }} {{ i.jalali_reservation_date }} </p>
-                                                    <p> تایم انتخابی: {{ i.start_time }} </p>
-                                                    {% if i.is_done == False %}
-                                                        <p class="text-success">با موفقیت رزرو شده </p>
-                                                    {% else %}
-                                                        <p class="text-warning">این رزرو به اتمام رسید</p>
-                                                    {% endif %}
-                                                    {% if i.is_paid == True %}
-                                                        <p class="text-success"> وضعیت پرداخت : پرداخت شده</p>
-                                                    {% else %}
-                                                        <p class="text-warning"> وضعیت پرداخت : در انتظار پرداخت</p>
-                                                    {% endif %}
-
-
-
-                                                    <button type="button" class="btn btn-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#removeModal-{{ i.id }}">
-                                                        لغو نوبت رزرو شده
-                                                    </button>
-
-
-                                                </div>
-                                                <div class="modal-footer text-center " dir="ltr">
-                                                    <button type="button" class="btn btn-secondary text-center"
-                                                            data-bs-dismiss="modal">بستن
-                                                    </button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Remove Modal -->
-                                    <div class="modal fade" id="removeModal-{{ i.id }}" tabindex="-1"
-                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">لغو
-                                                        نوبت</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    آیا مطمئنید که نوبت رزرو شده در تاریخ
-                                                    {{ i.jalali_reservation_date }}
-                                                    و تایم
-                                                    {{ i.start_time }}
-                                                    کنسل شود؟
-                                                </div>
-                                                <div class="modal-footer text-center" dir="ltr">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">خیر
-                                                    </button>
-
-                                                    <form method="post"
-                                                          action="{% url 'reserve:cancel_time' i.id %}">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="id" id="id" value="{{ i.id }}">
-                                                        <button type="submit" value="Submit" class="btn btn-danger">
-                                                            بله
-                                                            لغو
-                                                            شود
-                                                        </button>
-                                                    </form>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                {% elif i.is_canceled %}
-                                    <p class="text-danger"> لغو شده</p>
-                                {% endif %}
-
-
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-            {% else %}
-
-
-
-
-                <div class="d-flex justify-content-center mb-4">
-                <div class="col-12">
-
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">هیچ نوبت فعالی ندارید</h5>
-                            <p class="card-text fs-6"> از منوی بالا برای رزرو نوبت جدید استفاده کنید</p>
-                        </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
                     </div>
-
                 </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="all_reservations" class="d-flex justify-content-center">
+    <div class="col-md-8 mb-4">
+        <h5 class="mb-4" dir="auto">لیست نوبتها:</h5>
+
+        {% if all_reservations %}
+        <table class="table table-striped text-center align-middle shadow-lg rounded" dir="rtl">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">#</th> -->
+                    <th scope="col">سرویس</th>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">تایم</th>
+                    <th scope="col">وضعیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in all_reservations %}
+                <tr>
+                    <td dir="rtl"> {{ i.service }}</td>
+                    <td dir="ltr">
+                        {{ i.jalali_reservation_date }}
+                    </td>
+                    <td>{{ i.start_time }}</td>
+                    <td>
+                        {% if i.is_active %}
+
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#reservationDetailModal{{ i.id }}">
+                            جزئیات
+                        </button>
+                        <div class="modal fade" id="reservationDetailModal{{ i.id }}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="reservationDetailModalLabel"
+                                            style="font-family: 'Vazir';">نوبت رزرو شده</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" dir="rtl">
+
+                                        <p> تاریخ
+                                            انتخابی: {{ i.day }} {{ i.jalali_reservation_date }} </p>
+                                        <p> تایم انتخابی: {{ i.start_time }} </p>
+                                        {% if i.is_done == False %}
+                                        <p class="text-success">با موفقیت رزرو شده </p>
+                                        {% else %}
+                                        <p class="text-warning">این رزرو به اتمام رسید</p>
+                                        {% endif %}
+                                        {% if i.is_paid == True %}
+                                        <p class="text-success"> وضعیت پرداخت : پرداخت شده</p>
+                                        {% else %}
+                                        <p class="text-warning"> وضعیت پرداخت : در انتظار پرداخت</p>
+                                        {% endif %}
+
+
+
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#removeModal-{{ i.id }}">
+                                            لغو نوبت رزرو شده
+                                        </button>
+
+
+                                    </div>
+                                    <div class="modal-footer text-center " dir="ltr">
+                                        <button type="button" class="btn btn-secondary text-center"
+                                            data-bs-dismiss="modal">بستن
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Remove Modal -->
+                        <div class="modal fade" id="removeModal-{{ i.id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">لغو
+                                            نوبت</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        آیا مطمئنید که نوبت رزرو شده در تاریخ
+                                        {{ i.jalali_reservation_date }}
+                                        و تایم
+                                        {{ i.start_time }}
+                                        کنسل شود؟
+                                    </div>
+                                    <div class="modal-footer text-center" dir="ltr">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">خیر
+                                        </button>
+
+                                        <form method="post" action="{% url 'reserve:cancel_time' i.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" id="id" value="{{ i.id }}">
+                                            <button type="submit" value="Submit" class="btn btn-danger">
+                                                بله
+                                                لغو
+                                                شود
+                                            </button>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {% elif i.is_canceled %}
+                        <p class="text-danger"> لغو شده</p>
+                        {% endif %}
+
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+
+
+
+
+        <div class="d-flex justify-content-center mb-4">
+            <div class="col-12">
+
+                <div class="card text-center mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">هیچ نوبت فعالی ندارید</h5>
+                        <p class="card-text fs-6"> از منوی بالا برای رزرو نوبت جدید استفاده کنید</p>
+                    </div>
+                </div>
+
+            </div>
 
             {% endif %}
-            </div>
         </div>
+    </div>
 
 
 
@@ -187,8 +204,8 @@
 
 
     {% elif not user.is_authenticated %}
-        <p>You are not logged in</p>
+    <p>You are not logged in</p>
     {% endif %}
 
 
-{% endblock %}
+    {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -8,9 +8,24 @@ from .forms import RegisterForm
 from django.contrib import messages
 from reservation.models import Appointment
 from reservation.utils import convert_to_persian_weekday
+from django.contrib.auth.decorators import login_required
+
+from .forms import UpdateUserForm
 
 
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
 
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'پروفایل شما آپدیت شد')
+            return redirect(to="account:login")
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+
+    return render(request, 'account/profile.html', {'user_form': user_form})
 
 class Dashboard(View):
     template_name = "account/dashboard.html"
