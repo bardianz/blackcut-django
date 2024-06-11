@@ -35,7 +35,7 @@ class UpdateUserForm(forms.ModelForm):
     last_name = forms.CharField(
         required=True,
         label="نام خانوادگی",
-        widget=forms.TextInput(attrs={"class": "form-control", "pattern": "[آ-ی]"}),
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     class Meta:
