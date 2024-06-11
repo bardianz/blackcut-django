@@ -69,6 +69,14 @@ def register_view(request):
             login(request, user,backend='django.contrib.auth.backends.ModelBackend')
             return redirect("account:dashboard")
         else:
+            password1=request.POST["password1"]
+            password2=request.POST["password2"]
+            if password1 != password2:
+                messages.error(request, "پسورد و تکرار پسورد یکی نیستند!")
+                return redirect("account:register")
+            elif password1 < 8 :
+                messages.error(request, "پسورد باید حداثل 8 کاراکتر باشد")
+                return redirect("account:register")
             messages.error(request, "لطفا با اطلاعات درستی فرم ثبت نام را پر کنید!")
             return redirect("account:register")
     form = RegisterForm()
