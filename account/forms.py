@@ -22,7 +22,7 @@ class UpdateUserForm(forms.ModelForm):
         ),
     )
     email = forms.EmailField(
-        required=True,
+        required=False,
         disabled=True,
         label="ایمیل",
         widget=forms.TextInput(attrs={"class": "form-control"}),
