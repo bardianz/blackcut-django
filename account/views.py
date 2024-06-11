@@ -74,7 +74,7 @@ def register_view(request):
             if password1 != password2:
                 messages.error(request, "پسورد و تکرار پسورد یکی نیستند!")
                 return redirect("account:register")
-            elif password1 < 8 :
+            elif len(password1) < 8 :
                 messages.error(request, "پسورد باید حداثل 8 کاراکتر باشد")
                 return redirect("account:register")
             messages.error(request, "لطفا با اطلاعات درستی فرم ثبت نام را پر کنید!")
