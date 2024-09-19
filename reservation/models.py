@@ -1,4 +1,3 @@
-from datetime import date
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -54,7 +53,7 @@ class Appointment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name="سرویس")
-    date = models.DateField(verbose_name="بازه زمانی")
+    date = models.DateField(verbose_name="تارخ")
     timeslot = models.ForeignKey(TimeSlot, on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name="بازه زمانی")
     is_active = models.BooleanField(verbose_name="آیا این نوبت فعال است", default=True, blank=True, null=True)
     is_done = models.BooleanField(verbose_name="آیا انجام شده است", default=False, blank=True, null=True)
@@ -75,10 +74,7 @@ class Appointment(models.Model):
 
     def save(self, *args, **kwargs):
 
-        current_date = date.today()
-        if self.date < current_date:
-                self.is_active=False
-                self.status="expired"
+
 
 
         if self.is_canceled:
