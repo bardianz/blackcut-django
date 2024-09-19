@@ -73,13 +73,32 @@
                     <td dir="ltr">
                         {{ i.jalali_reservation_date }}
                     </td>
-                    <td>{{ i.start_time }}</td>
-                    <td>
-                        {% if i.is_active %}
+                    <td>{{ i.timeslot.start_time }}</td>
+                    <td class="align-middle">
+                        {% if i.status == 'active' %}
+                        <p class="text-success">نوبت فعال</p>
 
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                        {% elif i.status == 'expired' %}
+                        <p class="text-danger">منقضی شده</p>
+
+                        {% elif i.status == 'done' %}
+                        <p class="text-info">در انتظار پرداخت</p>
+                        
+                        {% elif i.status == 'paid' %}
+                        <p class="text-info">پرداخت شده</p>
+
+
+                        {% elif i.status == 'canceled' %} 
+                        <p class="text-danger">لغو شده</p> 
+                        {% endif  %}
+
+                    
+
+                    {% if i.status == 'active' %}
+
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#reservationDetailModal{{ i.id }}">
-                            جزئیات
+                            جزئیات / لغو
                         </button>
                         <div class="modal fade" id="reservationDetailModal{{ i.id }}" data-bs-backdrop="static"
                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
@@ -96,7 +115,7 @@
 
                                         <p> تاریخ
                                             انتخابی: {{ i.day }} {{ i.jalali_reservation_date }} </p>
-                                        <p> تایم انتخابی: {{ i.start_time }} </p>
+                                        <p> تایم انتخابی: {{ i.timeslot.start_time }} </p>
                                         {% if i.is_done == False %}
                                         <p class="text-success">با موفقیت رزرو شده </p>
                                         {% else %}
@@ -153,12 +172,9 @@
                                             {% csrf_token %}
                                             <input type="hidden" name="id" id="id" value="{{ i.id }}">
                                             <button type="submit" value="Submit" class="btn btn-danger">
-                                                بله
-                                                لغو
-                                                شود
+                                                بله لغو شود
                                             </button>
                                         </form>
-
 
                                     </div>
                                 </div>
@@ -166,10 +182,7 @@
                         </div>
 
 
-                        {% elif i.is_canceled %}
-                        <p class="text-danger"> لغو شده</p>
-                        {% endif %}
-
+                     {% endif %}
 
                     </td>
                 </tr>

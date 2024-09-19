@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -62,10 +63,23 @@ class Appointment(models.Model):
     is_expired = models.BooleanField(verbose_name="آیا نوبت منقضی شده است؟", default=False, blank=True, null=True)
     products = models.ManyToManyField(Product,blank=True,verbose_name="محصولات انتخابی")
 
- 
+    STATUS_CHOICES = [
+    ("active", "فعال"),
+    ("canceled", "لغو شده"),
+    ("expired", "منقضی"),
+    ("done", "انجام شده"),
+    ("paid", "پرداخت شده"),
+]
+    status = models.CharField(choices=STATUS_CHOICES , max_length=25,default="active",verbose_name="وضعیت")
 
 
     def save(self, *args, **kwargs):
+
+        current_date = date.today()
+        if self.date < current_date:
+                self.is_active=False
+                self.status="expired"
+
 
         if self.is_canceled:
             self.is_done = False

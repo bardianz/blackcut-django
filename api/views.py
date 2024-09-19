@@ -87,6 +87,7 @@ class MakeDoneAppointment(APIView):
         try:
             appointment = Appointment.objects.get(id=appointment_id)
             appointment.is_done = True
+            appointment.status = "done"
             appointment.save()
             return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
@@ -99,6 +100,7 @@ class MakePaidAppointment(APIView):
         try:
             appointment = Appointment.objects.get(id=appointment_id)
             appointment.is_paid = True
+            appointment.status = "paid"
             appointment.save()
             return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
@@ -110,7 +112,7 @@ class MakeExpiredAppointment(APIView):
         appointment_id = request.data.get('appointment_id')
         try:
             appointment = Appointment.objects.get(id=appointment_id)
-            appointment.is_expired = True
+            appointment.status = "expired"
             appointment.save()
             return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:

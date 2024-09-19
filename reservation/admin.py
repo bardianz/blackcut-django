@@ -14,8 +14,8 @@ class TimeSlotAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('user_identifier', 'service', 'jalali_reservation_date', 'timeslot', 'is_active', 'is_done', 'is_paid', 'is_canceled')
-    list_filter = ('service', 'date', 'is_active', 'is_done', 'is_paid', 'is_canceled')
+    list_display = ('user_identifier', 'service', 'jalali_reservation_date', 'timeslot', 'status')
+    list_filter = ('service', 'date', 'status')
     search_fields = ('user_identifier', 'jalali_reservation_date', 'user__first_name')
     list_per_page = 20
 

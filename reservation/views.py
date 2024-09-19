@@ -10,6 +10,7 @@ def cancel_reservation(request, id):
     if request.method == "POST":
         appointment = Appointment.objects.get(id=id)
         appointment.is_canceled = True
+        appointment.status = "canceled"
         appointment.save()
         return redirect("account:dashboard")
 
@@ -33,10 +34,7 @@ def choose_date_view(request):
         date = request.POST.get("date")
         service = request.POST.get("service")
         
-
-        print(date, type(date))
-        print("----------")
-
+        
         # Check service and date existence
         if not service or not date:
             context["error_message"] = "سرویس یا تاریخ انتخاب نشده"

@@ -8,6 +8,8 @@ from .forms import RegisterForm
 from django.contrib import messages
 from reservation.models import Appointment
 from reservation.utils import convert_to_persian_weekday
+from datetime import datetime, date
+
 from django.contrib.auth.decorators import login_required
 
 from .forms import UpdateUserForm
@@ -27,6 +29,7 @@ def profile(request):
 
     return render(request, 'account/profile.html', {'user_form': user_form})
 
+
 class Dashboard(View):
     template_name = "account/dashboard.html"
     form_class = UserCreationForm
@@ -36,19 +39,22 @@ class Dashboard(View):
         if not request.user.is_authenticated:
             return redirect("account:login")
 
-        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','date').all()
+        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','is_expired','status','date').all()
+
         for appointment in all_reservations:
 
-            appointment.start_time = str( appointment.timeslot.start_time)[:-3]
+            # appointment.start_time = str( appointment.timeslot.start_time)[:-3]
             appointment.reserve_id = appointment.id
 
-            
-            
-
+        current_date = date.today()
         active_reservations = []
         for appointment in all_reservations:
             if appointment.is_active == True:
-                active_reservations.append(appointment)
+                if appointment.date < current_date:
+                    appointment.is_active=False
+                    appointment.status="expired"
+                else:
+                    active_reservations.append(appointment)
 
 
         context = {
@@ -57,6 +63,8 @@ class Dashboard(View):
             "all_reservations": all_reservations,
         }
         return render(request, self.template_name, context)
+
+
 
 
 def register_view(request):
