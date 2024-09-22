@@ -8,6 +8,7 @@ from shop.models import Product
 from utils.persian_date_convertor import persian_date_string_convertor
 from utils.persian_weekday import convert_to_persian_weekday
 
+from PIL import Image
 
 
 SERVICE_IS_ACTIVE_CHOICES = (
@@ -22,8 +23,16 @@ class Service(models.Model):
         verbose_name_plural = "سرویس‌ها"
 
     service_name = models.CharField(verbose_name="نام سرویس", max_length=15)
-    is_active = models.BooleanField(verbose_name="آی این خدمت قابل ارائه است؟", choices=SERVICE_IS_ACTIVE_CHOICES,
+    img = models.ImageField(default="reservation//no-picture.png", upload_to='reservation/service/images/', verbose_name="تصویر سرویس")
+    desc = models.CharField(verbose_name="توضیحات سرویس", max_length=80,blank = True,null=True)
+    is_active = models.BooleanField(verbose_name="وضعیت فعال بودن", choices=SERVICE_IS_ACTIVE_CHOICES,
                                     default=True)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.img.path)
+        # img.thumbnail((100, 100))
+        img.save(self.img.path)
 
     def get_service_name(self):
         return self.service_name

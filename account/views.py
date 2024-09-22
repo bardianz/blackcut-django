@@ -38,21 +38,28 @@ class Dashboard(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("account:login")
+        
+        current_date = date.today()
 
-        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','is_expired','status','date').all()
+        # reservations_to_update = Appointment.objects.filter(date<current_date,user=request.user)
+
+        # for reservation in reservations_to_update:
+        #     reservation.status="expired"
+        #     reservation.is_active=False
+        #     reservation.save()
+
+        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','date','is_expired').all()
 
         for appointment in all_reservations:
-
-            # appointment.start_time = str( appointment.timeslot.start_time)[:-3]
             appointment.reserve_id = appointment.id
 
-        current_date = date.today()
         active_reservations = []
         for appointment in all_reservations:
             if appointment.is_active == True:
                 if appointment.date < current_date:
                     appointment.is_active=False
                     appointment.status="expired"
+                    appointment.save()
                 else:
                     active_reservations.append(appointment)
 

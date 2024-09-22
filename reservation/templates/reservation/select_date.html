@@ -22,8 +22,12 @@
 
         <div class="col-12">
             <div class="col-12">
-                <div class="alert alert-info" role="alert">
+                <div class="alert alert-warning" role="alert">
                     لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    سرویس انتخاب شده: {{selected_service_name}}
                 </div>
 
                 {% if error_message %}
@@ -37,16 +41,15 @@
 
             <div class="col-12">
 
-                <div class="col-md-6 mb-3">
+                {% comment %} <div class="col-md-6 mb-3">
                     <label for="id_service" class="form-label">سرویس مورد نظر خود را انتخاب کنید</p>
                         <select class="form-select" aria-label="سرویس" id="id_service" onchange="checkService()" aria-placeholder="سرویس">
                             {% for service in active_services %}
                             <option value="{{service.id}}">{{service}}</option>
-
                             {% endfor %}
 
                         </select>
-                </div>
+                </div> {% endcomment %}
 
                 <table class="table text-center" dir="rtl">
                     <thead>
@@ -58,21 +61,17 @@
                     </thead>
                     <tbody>
                         {% for date in dates_list %}
-
                         <tr>
                             <td> {{ date.weekday }} {{ date.date|to_jalali:'%Y/%m/%d' }} </td>
                             <td>
                                 <form method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="date" value="{{ date.formatted_date }}">
-                                    <input type="hidden" name="service"  id="serviceInput"  value="">
-                                    <button onclick="checkService()" name="btn-reserve" type="submit"
-                                        value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button>
+                                    {% comment %} <input type="hidden" name="service"  id="serviceInput"  value=""> {% endcomment %}
+                                    <button name="btn-reserve" type="submit" value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button>
+                                    {% comment %} <button onclick="checkService()" name="btn-reserve" type="submit" value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button> {% endcomment %}
                                 </form>
                             </td>
-
-
-
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -105,7 +104,7 @@
 
 {% block static_js %}
 
-<script>
+{% comment %} <script>
 function checkService() {
     
     var selectedService = document.getElementById("id_service").value;
@@ -116,7 +115,7 @@ function checkService() {
     }
 }
 
-</script>
+</script> {% endcomment %}
 
 <!-- <script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script> -->
 

@@ -15,48 +15,63 @@ def cancel_reservation(request, id):
         return redirect("account:dashboard")
 
 
+def choose_service(request):
+
+
+    
+    if not request.user.first_name and not request.user.last_name :
+        messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
+        return redirect("account:dashboard")
+    
+    user_active_appointments = Appointment.objects.filter(user=request.user, is_active=True).count()
+    if user_active_appointments > 3:
+        messages.error(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
+        return redirect("account:dashboard")
+
+    
+    template_name = "reservation/select_service.html"
+    context = {
+        "all_services": Service.objects.filter
+    }
+
+    if request.method == "POST":
+        service = request.POST.get("service")
+        if service:
+            return redirect("reserve:select_date", service=service)
+
+
+
+    return render(request, template_name, context)
+
+
 
 @login_required
-def choose_date_view(request):
+def choose_date_view(request,service):
 
     template_name = "reservation/select_date.html"
     context = {
         "dates_list": date_dict_with_persian_weekday(days_number=14),
-        "active_services": Service.objects.filter(is_active=True)
+        "selected_service_name": Service.objects.get(id=service),
+
+        # "active_services": Service.objects.filter(is_active=True)
     }
 
     if request.method == "POST":
-        user_active_appointments = Appointment.objects.filter(user=request.user, is_active=True).count()
-        if user_active_appointments > 3:
-            context["error_message"] = "نوبت های فعال شما بیش از حد مجاز است. لطفا در قسمت پنل کاربری آن ها را کنترل کنید"
-            return render(request, template_name, context)
-
+  
         date = request.POST.get("date")
-        service = request.POST.get("service")
         
-        
-        # Check service and date existence
         if not service or not date:
             context["error_message"] = "سرویس یا تاریخ انتخاب نشده"
             return render(request, template_name, context)
-
-        # # Convert datetime to str
-        # try:
-        #     date = datetime.strptime(date, "%Y-%m-%d")
-
-            
-        # except Exception as e:
-        #     context["error_message"] = f"مشکلی در تبدیل تاریخ پیش آمده: {e}"
-        #     return render(request, template_name, context)
 
         if is_future_date(date):
             return redirect("reserve:select_time", date=date, service=service)
         else:
             context["error_message"] = "لطفاً تاریخی قبل از امروز را انتخاب نکنید"
 
-    if not request.user.first_name and not request.user.last_name :
-        messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
-        return redirect("account:dashboard")
+    # if not request.user.first_name and not request.user.last_name :
+    #     messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
+    #     return redirect("account:dashboard")
         
     return render(request, template_name, context)
 
@@ -74,7 +89,7 @@ def choose_time_view(request, date, service):
 
         for i in all_timeslots:
             start_time_formatted = i.start_time.strftime("%H:%M")
-            is_reserved = Appointment.objects.filter(date=date,timeslot=i,is_active=True,is_canceled=False,
+            is_reserved = Appointment.objects.filter(date=date,timeslot=i,is_active=True,is_canceled=False,service=service
             ).exists()
 
             timeslots.append(

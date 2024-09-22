@@ -5,11 +5,49 @@ from rest_framework.response import Response
 from reservation.models import Appointment
 from shop.models import Product
 from .serializers import AppointmentSerializer,ProductsSerializer
+from datetime import datetime, date
 
 
 class ActiveAppointments(APIView):
+    http_method_names = ['get',]
     def get_queryset(self):
-        return Appointment.objects.filter(is_active=True, is_done=False).order_by('date', 'timeslot__start_time')
+        current_date = date.today()
+        
+        all_reservations = Appointment.objects.filter(is_active=True).order_by('date', 'timeslot__start_time')
+        active_reservations= []
+        for appointment in all_reservations:
+            if appointment.is_active == True:
+                if appointment.date < current_date:
+                    appointment.is_active=False
+                    appointment.status="expired"
+                    appointment.save()
+                else:
+                    active_reservations.append(appointment)
+
+        return active_reservations
+    
+    def get(self, request):
+        appointments = self.get_queryset()
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)
+    
+
+
+
+class AllAppointments(APIView):
+    def get_queryset(self):
+        current_date = date.today()
+        all_reservations = Appointment.objects.filter(is_active=True).order_by('date', 'timeslot__start_time')
+
+        for appointment in all_reservations:
+            if appointment.is_active == True:
+                if appointment.date < current_date:
+                    appointment.is_active=False
+                    appointment.status="expired"
+                    appointment.save()
+
+        return all_reservations
+
 
     def get(self, request):
         appointments = self.get_queryset()
@@ -113,6 +151,7 @@ class MakeExpiredAppointment(APIView):
         try:
             appointment = Appointment.objects.get(id=appointment_id)
             appointment.status = "expired"
+            appointment.is_expired = True
             appointment.save()
             return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
