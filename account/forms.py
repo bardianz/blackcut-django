@@ -29,12 +29,12 @@ class UpdateUserForm(forms.ModelForm):
     )
     first_name = forms.CharField(
         required=True,
-        label="نام",
+        label="نام (حتما فارسی باشد)",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     last_name = forms.CharField(
         required=True,
-        label="نام خانوادگی",
+        label="نام خانوادگی (حتما فارسی باشد)",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 

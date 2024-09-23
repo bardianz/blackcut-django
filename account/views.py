@@ -41,13 +41,6 @@ class Dashboard(View):
         
         current_date = date.today()
 
-        # reservations_to_update = Appointment.objects.filter(date<current_date,user=request.user)
-
-        # for reservation in reservations_to_update:
-        #     reservation.status="expired"
-        #     reservation.is_active=False
-        #     reservation.save()
-
         all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','-date','is_expired').all()
 
         for appointment in all_reservations:

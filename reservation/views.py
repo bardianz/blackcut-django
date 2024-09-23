@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Appointment, Service, TimeSlot
 from .utils import date_dict_with_persian_weekday,is_future_date
 from django.contrib import messages
-
+from account.utils import check_is_persian
 
 @login_required
 def cancel_reservation(request, id):
@@ -18,14 +18,17 @@ def cancel_reservation(request, id):
 def choose_service(request):
 
 
-    
-    if not request.user.first_name and not request.user.last_name :
-        messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
+    user_first_name = request.user.first_name 
+    user_last_name = request.user.last_name 
+
+
+    if not user_first_name and not user_last_name or not check_is_persian(user_first_name) or not check_is_persian(user_last_name) :
+        messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل بطور کامل و فارسی تکمیل کنید')
         return redirect("account:dashboard")
     
     user_active_appointments = Appointment.objects.filter(user=request.user, is_active=True).count()
     if user_active_appointments > 3:
-        messages.error(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
+        messages.warning(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
         return redirect("account:dashboard")
 
     
@@ -120,6 +123,7 @@ def choose_time_view(request, date, service):
                 user=request.user,
             )
             appoinment.save()
+            messages.info(request, 'نوبت شما با موفقیت رزرو شد')
             return redirect("account:dashboard")
 
         print("NO DATA")
