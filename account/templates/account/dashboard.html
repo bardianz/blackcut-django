@@ -26,22 +26,30 @@
             {% endfor%}
         </div>
 
+        <ul class="nav justify-content-center nav-pills mb-5">
+            <li class="nav-item">
+              <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'account:profile' %}">پروفایل</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link bg-warning disabled mx-2" aria-disabled="true">کد تخفیف (به زودی...)</a>
+            </li>
+          </ul>
+
         <div class="row">
             <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
-                    <div class="card-body text-center">
-                        <a class="btn btn-warning btn-sm card-text mx-2" href="{% url 'reserve:reserve' %}"
-                            role="button">رزرو نوبت جدید</a>
-
-                        <a class="btn btn-warning btn-sm card-text mx-2" href="{% url 'account:profile' %}"
-                            role="button">پروفایل</a>
+                    <div class="card-body">
+                        <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
+                        <p class="card-text p-1">تعداد کد تخفیف های شما : 0</p>
                     </div>
                 </div>
             </div>
