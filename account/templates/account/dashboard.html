@@ -26,19 +26,29 @@
             {% endfor%}
         </div>
 
-        <ul class="nav justify-content-center nav-pills mb-5">
+        <ul class="nav justify-content-center nav-pills mb-3">
             <li class="nav-item">
-              <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a>
+                <a class="nav-link active bg-warning text-dark " href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'account:profile' %}">پروفایل</a>
+                <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'account:profile' %}">پروفایل</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link bg-warning disabled mx-2" aria-disabled="true">کد تخفیف (به زودی...)</a>
-            </li>
-          </ul>
+                <a class="nav-link bg-warning text-dark" aria-disabled="true" data-bs-toggle="collapse"
+                    href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">کد تخفیف
+                </a>
 
-        <div class="row">
+            </li>
+
+        </ul>
+
+        <div class="collapse mb-2" id="collapseExample">
+            <div class="card card-body bg-secondary">
+                بخش کد تخفیف به زودی فعال و قابل استفاده می‌گردد!
+            </div>
+        </div>
+
+        <div class="row mt-4">
             <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
                     <div class="card-body">
