@@ -162,7 +162,7 @@ def make_off(request):
     if Appointment.objects.filter(date=date,status="active").exists():
         messages.error(request, 'خطا: در روزی که انتخاب شده، نوبت هایی فعال هستند. تا زمانی که فعال باشند امکان تعطیل کردن روز وجود ندارد')
         return HttpResponseRedirect('/')
-        # return JsonResponse({'error': 'Appointments exist for this date. Cannot mark as off!'}, status=400)
+        # return JsonRلهesponse({'error': 'Appointments exist for this date. Cannot mark as off!'}, status=400)
 
     if Dayoff.objects.filter(date=date).exists():
         return JsonResponse({'error': 'This date is already marked as off!'}, status=400)
