@@ -9,9 +9,9 @@
 <div class="d-flex justify-content-center">
     <div class="col-md-5">
         <h4 class="mb-4" dir="auto">
-            انتخاب تایم برای تاریخ {{ selected_date }}
+            انتخاب تایم برای تاریخ {{ formatted_date|to_jalali:'%Y/%m/%d' }}
         </h4>
-        <table class="table text-center" dir="rtl">
+        <table class="table text-center table-bordered  border rounded-3" dir="rtl">
             <thead>
                 <tr>
                     <!-- <th scope="col">#</th> -->
@@ -26,11 +26,58 @@
                     <td> {{ i.start_time_formatted }}</td>
                     {%if i.status == "Available" %}
                     <td>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="time" value="{{ i.start_time_formatted }}">
-                            <button type="submit" value="Submit" class="btn btn-success btn-sm">رزرو</button>
-                        </form>
+
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#Modal{{ forloop.counter }}">رزرو</button>
+
+                        <div class="modal fade" id="Modal{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> آیا از ثبت نوبت اطمینان
+                                            دارید؟
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-start">
+
+                                        <ul>
+                                            <div class="fw-semibold">
+                                                <li>
+                                                    تاریخ: {{ formatted_date|to_jalali:'%Y/%m/%d' }}
+                                                </li>
+                                                <li>
+                                                    ساعت: {{ i.start_time_formatted }}
+                                                </li>
+                                                <li>
+                                                    سرویس انتخاب شده: {{ selected_service_name }}
+                                                </li>
+                                            </div>
+                                            <div class="fs-6">
+                                                <li>
+                                                    مجددا یادآوری میشود که
+                                                    لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+                                            </div>
+                                            </li>
+
+                                        </ul>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">انصراف</button>
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="time" value="{{ i.start_time_formatted }}">
+                                            <button type="submit" value="Submit" class="btn btn-success">رزرو</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                     {%elif i.status == "Reserved" %}
                     <td class="bg-danger">

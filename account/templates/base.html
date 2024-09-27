@@ -71,7 +71,7 @@
 
 
         </ul>
-        {% if user.is_authenticated and user.first_name %}
+        {% if user.is_authenticated  %}
         <ul class="ms-auto navbar-nav">
 
      
@@ -92,6 +92,9 @@
             <ul class="dropdown-menu">
 
               <li><a class="dropdown-item" href="{% url 'account:profile' %}">مشاهده حساب</a></li>
+              {% if request.user.is_staff %}
+              <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank" >پنل ادمین</a></li>
+              {% endif %}
               <li><a class="dropdown-item" href="{% url 'account:logout' %}">خروج</a></li>
             </ul>
           </li>
@@ -111,7 +114,29 @@
   </nav>
   <!-- Navbar -->
 
-  <div class="container mt-5 pt-2">
+
+    {% for message in messages %}
+    <div class="container">
+      <div class="d-flex justify-content-center">
+
+      <div class="col-md-8">
+
+    <div class="d-flex justify-content-center">
+        <div class="col">
+            <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                <div id="form_errors">
+                    <strong>{{ message }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+    {% endfor%}
+
+  <div class="container mt-2 pt-2">
 
 
    

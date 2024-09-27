@@ -1,9 +1,12 @@
+from datetime import datetime
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Appointment, Service, TimeSlot
+from .models import Appointment, Dayoff, Service, TimeSlot
 from .utils import date_dict_with_persian_weekday,is_future_date
 from django.contrib import messages
 from account.utils import check_is_persian
+from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def cancel_reservation(request, id):
@@ -14,7 +17,7 @@ def cancel_reservation(request, id):
         appointment.save()
         return redirect("account:dashboard")
 
-
+@login_required
 def choose_service(request):
 
 
@@ -51,14 +54,6 @@ def choose_service(request):
 @login_required
 def choose_date_view(request,service):
 
-    template_name = "reservation/select_date.html"
-    context = {
-        "dates_list": date_dict_with_persian_weekday(days_number=14),
-        "selected_service_name": Service.objects.get(id=service),
-
-        # "active_services": Service.objects.filter(is_active=True)
-    }
-
     if request.method == "POST":
   
         date = request.POST.get("date")
@@ -72,10 +67,27 @@ def choose_date_view(request,service):
         else:
             context["error_message"] = "لطفاً تاریخی قبل از امروز را انتخاب نکنید"
 
-    # if not request.user.first_name and not request.user.last_name :
-    #     messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل به درستی تکمیل کنید')
-    #     return redirect("account:dashboard")
-        
+
+    template_name = "reservation/select_date.html"
+
+
+    off_days = Dayoff.objects.all()
+    all_next_days = date_dict_with_persian_weekday(days_number=14)
+
+    for i in off_days:
+        print(i)
+        for j in all_next_days:
+            if str(i) == str(j['formatted_date']):
+                j['status'] = "day-off"
+
+
+    context = {
+        "dates_list": all_next_days,
+        "selected_service_name": Service.objects.get(id=service),
+
+        # "active_services": Service.objects.filter(is_active=True)
+    }
+    # print (context["dates_list"])
     return render(request, template_name, context)
 
 
@@ -106,7 +118,9 @@ def choose_time_view(request, date, service):
         context = {
             "total_time_slots": timeslots,
             "selected_date": date,
+            "formatted_date" : datetime.strptime(date, '%Y-%m-%d').date(),
             "service": service,
+            "selected_service_name": Service.objects.get(id=service),
         }
         template_name = "reservation/select_time.html"
         return render(request, template_name, context)
@@ -126,6 +140,54 @@ def choose_time_view(request, date, service):
             messages.info(request, 'نوبت شما با موفقیت رزرو شد')
             return redirect("account:dashboard")
 
-        print("NO DATA")
-        # Appointment.objects.create()
     return redirect("reserve:select_date")
+
+
+
+
+
+@login_required
+def make_off(request):
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Not Staff User!'}, status=403)
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+    date = request.POST.get('date')
+
+    if not date:
+        return JsonResponse({'error': 'No date provided'}, status=400)
+
+    if Appointment.objects.filter(date=date,status="active").exists():
+        messages.error(request, 'خطا: در روزی که انتخاب شده، نوبت هایی فعال هستند. تا زمانی که فعال باشند امکان تعطیل کردن روز وجود ندارد')
+        return HttpResponseRedirect('/')
+        # return JsonResponse({'error': 'Appointments exist for this date. Cannot mark as off!'}, status=400)
+
+    if Dayoff.objects.filter(date=date).exists():
+        return JsonResponse({'error': 'This date is already marked as off!'}, status=400)
+
+    Dayoff.objects.create(date=date)
+    return JsonResponse({'message': 'Date marked as off successfully!'}, status=200)
+
+
+@login_required
+def make_on(request):
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Not Staff User!'}, status=403)
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+    date = request.POST.get('date')
+
+    if not date:
+        return JsonResponse({'error': 'No date provided'}, status=400)
+
+    # حذف تمام رکوردهای مرتبط با تاریخ
+    deleted_count, _ = Dayoff.objects.filter(date=date).delete()
+
+    if deleted_count > 0:
+        return JsonResponse({'message': 'Day successfully opened!'}, status=200)
+    else:
+        return JsonResponse({'error': 'No records found for the given date!'}, status=404)

@@ -39,22 +39,12 @@
 
 
 
-            <div class="col-12">
+            <div class="col-12   bg-warning">
 
-                {% comment %} <div class="col-md-6 mb-3">
-                    <label for="id_service" class="form-label">سرویس مورد نظر خود را انتخاب کنید</p>
-                        <select class="form-select" aria-label="سرویس" id="id_service" onchange="checkService()" aria-placeholder="سرویس">
-                            {% for service in active_services %}
-                            <option value="{{service.id}}">{{service}}</option>
-                            {% endfor %}
 
-                        </select>
-                </div> {% endcomment %}
-
-                <table class="table text-center" dir="rtl">
+                <table class="table text-center table-bordered rounded-3" dir="rtl">
                     <thead>
                         <tr>
-                            <!-- <th scope="col">#</th> -->
                             <th scope="col">تایم</th>
                             <th scope="col">نوبت گرفتن</th>
                         </tr>
@@ -64,13 +54,38 @@
                         <tr>
                             <td> {{ date.weekday }} {{ date.date|to_jalali:'%Y/%m/%d' }} </td>
                             <td>
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="date" value="{{ date.formatted_date }}">
-                                    {% comment %} <input type="hidden" name="service"  id="serviceInput"  value=""> {% endcomment %}
-                                    <button name="btn-reserve" type="submit" value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button>
-                                    {% comment %} <button onclick="checkService()" name="btn-reserve" type="submit" value="Submit" class="btn btn-success btn-sm">انتخاب این تاریخ</button> {% endcomment %}
-                                </form>
+
+                                <div class="btn-group">
+
+                                    {% if date.status == "active" %}
+
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="date" id="date" value="{{ date.formatted_date }}">
+                                        <button name="btn-reserve" type="submit" value="Submit"
+                                            class="btn btn-success btn-sm">رزرو</button>
+                                    </form>
+                                    {% elif date.status == "day-off" %}
+                                    <button class="btn btn-danger btn-sm" disabled>تعطیل</button>
+
+                                    {% endif %}
+
+                                    
+
+
+                                    {% if request.user.is_staff %}
+                                    <div class="px-2" ></div>
+                                    <input type="hidden" class="date-field" name="date"
+                                        value="{{ date.formatted_date }}">
+
+                                    {% if date.status == "active" %}
+                                    <button class="make-off-btn btn btn-warning btn-sm">تعطیل کردن</button>
+                                    {% elif date.status == "day-off" %}
+                                    <button class="make-on-btn btn btn-warning btn-sm">باز کردن</button>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+
                             </td>
                         </tr>
                         {% endfor %}
@@ -104,18 +119,61 @@
 
 {% block static_js %}
 
-{% comment %} <script>
-function checkService() {
-    
-    var selectedService = document.getElementById("id_service").value;
-    console.log(selectedService);
-    var serviceInputs = document.querySelectorAll("input[name='service']");
-    for (var i = 0; i < serviceInputs.length; i++) {
-        serviceInputs[i].value = selectedService;
-    }
-}
 
-</script> {% endcomment %}
+<script>
+   
+
+   $(document).ready(function () {
+    // برای تعطیل کردن تاریخ
+    $('.make-off-btn').click(function () {
+        var date = $(this).closest('tr').find('.date-field').val();
+
+        $.ajax({
+            url: "{% url 'reserve:make_off' %}", 
+            type: 'POST',
+            data: {
+                'date': date,
+                'csrfmiddlewaretoken': '{{ csrf_token }}', 
+            },
+            success: function (response) {
+                // alert(response.message);
+                location.reload();  
+            },
+            error: function (xhr, errmsg, err) {
+                alert('خطا: ' + errmsg);
+            }
+        });
+    });
+
+    $('.make-on-btn').click(function () {
+        var date = $(this).closest('tr').find('.date-field').val();
+
+        $.ajax({
+            url: "{% url 'reserve:make_on' %}", 
+            type: 'POST',
+            data: {
+                'date': date,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (response) {
+                
+                // alert(response.message);
+                location.reload(); 
+            },
+            error: function (xhr, errmsg, err) {
+                var responseError = xhr.responseJSON ? xhr.responseJSON.error : 'خطا در درخواست';
+                // alert('خطا: ' + responseError);
+            }
+        });
+    });
+});
+
+
+
+
+
+
+</script>
 
 <!-- <script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script> -->
 
