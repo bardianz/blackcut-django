@@ -9,6 +9,8 @@ from django.contrib import messages
 from reservation.models import Appointment
 from reservation.utils import convert_to_persian_weekday
 from datetime import datetime, date
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
 
@@ -83,7 +85,7 @@ def register_view(request):
                 messages.error(request, "پسورد و تکرار پسورد یکی نیستند!")
                 return redirect("account:register")
             elif len(password1) < 8 :
-                messages.error(request, "پسورد باید حداثل 8 کاراکتر باشد")
+                messages.error(request, "پسورد باید حداقل 8 کاراکتر باشد")
                 return redirect("account:register")
             messages.error(request, "لطفا با اطلاعات درستی فرم ثبت نام را پر کنید!")
             return redirect("account:register")
@@ -110,9 +112,21 @@ def login_view(request):
             username=request.POST["username"],
             password=request.POST["password"],
         )
+        if not User.objects.filter(username=request.POST["username"]).exists():
+            messages.warning(request, 'هیچ یوزری با این نام کاربری ثبت نام شده!')
+            return redirect('account:login') 
         if user is not None:
             login(request=request, user=user)
             return redirect("account:dashboard")
 
         context = {"error_message": "یوزرنیم یا پسورد اشتباه است"}
         return render(request, template_name, context=context)
+
+
+
+def check_username(request):
+    username = request.GET.get('username', None)
+    response = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(response)

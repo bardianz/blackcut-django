@@ -3,13 +3,6 @@
 {% block content %}
 
 
-
-
-
-
-
-
-
             <div id="google-login">
 
                 <p dir="rtl">
@@ -43,19 +36,6 @@
 
 
 
-
-<div class="div">
-    {% for message in messages %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <div id="form_errors">
-            <strong>{{ message }}</strong>
-
-        </div>
-    </div>
-    {% endfor%}
-</div>
-
-
 <p dir="rtl">
     ثبت نام:
 </p>
@@ -68,26 +48,20 @@
                     <p class="text-warning">پر کردن موارد ستاره دار الزامی است</p>
                 </div>
 
-{#                <div class="col-md-6">#}
-{#                    <label for="inputFirstName" class="form-label">نام</label>#}
-{#                    <input type="text" class="form-control" name="first_name" id="inputFirstName"#}
-{#                        placeholder="First name" aria-label="First name">#}
-{#                </div>#}
-{#                <div class="col-md-6">#}
-{#                    <label for="last_name" class="form-label">نام خانوادگی</label>#}
-{#                    <input type="text" class="form-control text-dark" name="last_name" id="last_name"#}
-{#                        placeholder="Last name" aria-label="Last name">#}
-{#                </div>#}
                 <div class="col-md-12">
-                    <label for="username" class="form-label">نام کاربری*</label>
+                    <label for="username" class="form-label">* نام کاربری (username)</label>
                     <input type="text" class="form-control text-dark" dir="ltr" name="username" maxlength="150"
                         autocapitalize="none" autocomplete="username" autofocus="" required=""
                         aria-describedby="id_username_helptext" id="id_username" required>
+
                 </div>
+
+                <span id="username-check" class="mt-2"></span>
+
                     
 
                 <div class="col-md-6">
-                    <label for="inputpassword1" class="form-label">رمزعبور*</label>
+                    <label for="inputpassword1" class="form-label">* رمزعبور</label>
                     <input class="form-control text-dark" dir="ltr" type="password" name="password1"
                         autocomplete="new-password" required="" aria-describedby="id_password1_helptext"
                         id="id_password1">
@@ -101,15 +75,16 @@
 
 
                 <div class="col-md-12 text-center mt-4">
-                    <button type="submit" class="btn btn-warning">ثبت نام</button>
+                    <!-- <button type="submit" class="btn btn-warning">ثبت نام</button> -->
+                    <button type="submit" id="submit-btn" class="btn btn-warning" disabled>ثبت نام</button>
+
                 </div>
             </form>
 
             <div class=" mt-4 " role="alert">
                 <div id="form_errors">
                     <ul>
-                        <!-- <li> رمز عبور شما نمی تواند فقط عددی باشد. </li>
-                        <li> رمز عبور شما نباید شبیه سایر اطلاعات شما باشد. </li> -->
+                        <li>  نام کاربری شما باید حداقل 6 کاراکتر داشته باشد. </li>
                         <li> رمز عبور شما باید حداقل 8 کاراکتر داشته باشد. </li>
                         <!-- <li> رمز عبور شما نمی تواند یک رمز عبور ساده و رایج باشد. </li> -->
                     </ul>        
@@ -120,3 +95,50 @@
 
 
 {% endblock%}
+
+
+
+{% block static_js %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var english = /^[A-Za-z0-9]*$/;  // regex برای کاراکترهای مجاز
+
+        $('#id_username').on('keyup', function(){
+            var username = $(this).val();
+
+            if (username.length == 0) {
+                $('#username-check').text('');
+                $('#submit-btn').attr('disabled', 'disabled'); // اگر فیلد خالی باشد، دکمه غیرفعال شود
+            }
+            else if (!english.test(username)) {
+                $('#username-check').text('فقط از حروف انگلیسی و اعداد استفاده کنید').css('color', '#FF033E');
+                $('#submit-btn').attr('disabled', 'disabled'); // اگر کاراکتر نامعتبر باشد، دکمه غیرفعال شود
+            }
+            else if (username.length < 6) {
+                $('#username-check').text('نام کاربری باید بیشتر از 6 کاراکتر باشد').css('color', '#FF033E');
+                $('#submit-btn').attr('disabled', 'disabled'); // اگر کمتر از 6 کاراکتر باشد، دکمه غیرفعال شود
+            }
+            else {
+                $.ajax({
+                    url: '{% url "account:check_username" %}',
+                    data: {
+                        'username': username
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.is_taken) {
+                            $('#username-check').text('این نام کاربری از قبل گرفته شده').css('color', '#D2122E');
+                            $('#submit-btn').attr('disabled', 'disabled'); // دکمه را غیرفعال کنید
+                        } else {
+                            $('#username-check').text('این نام کاربری در دسترس است').css('color', '#32de84');
+                            $('#submit-btn').removeAttr('disabled'); // دکمه را فعال کنید
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}
