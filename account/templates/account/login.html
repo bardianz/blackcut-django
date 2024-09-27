@@ -4,9 +4,6 @@
 
 
 
-    <div class="d-flex justify-content-center">
-        <div class="col-md-3">
-
 
 
 
@@ -48,9 +45,7 @@
                 ورود بدون گوگل:
             </p>
 
-            {% if error_message %}
-            <div class="alert alert-danger"> {{error_message}}</div>
-            {% endif %}
+
             
             <p class="fs-6 mb-2 pb-2" dir="rtl">
              حساب کاربری ندارید؟ <a class="link-warning link-underline-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url "account:register" %}"> همین حالا ثبت نام کنید</a>
@@ -96,9 +91,6 @@
             </form>
 
 
-        </div>
-
-    </div>
 
 
 

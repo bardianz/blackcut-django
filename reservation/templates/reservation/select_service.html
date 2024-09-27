@@ -8,93 +8,60 @@
 
 
 
-<div class="d-flex justify-content-center mb-4">
-    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 px-2">
+<!-- <div class="d-flex justify-content-center mb-4">
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 px-2"> -->
 
-        <div class="col-12 text-center mb-3">
-            <h3 class"" dir="auto"><strong> رزرو نوبت جدید</strong></h3>
-             <p class="m-2">سرویس مورد نظر خود را انتخاب کنید</p>
-        </div>
-
-        <div class="col-12">
-            <div class="col-12">
-
-
-                {% if error_message %}
-                <div class="alert alert-danger"> {{error_message}} </div>
-                {% endif %}
-                <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
-                <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
-            </div>
-
-
-        </div>
-    </div>
+<div class="row text-center mb-3">
+    <h3 class"" dir="auto"><strong> رزرو نوبت جدید</strong></h3>
+    <p class="m-2">سرویس مورد نظر خود را انتخاب کنید</p>
 </div>
 
 
 
 
-
-<div class="container">
-
-
-
-
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-{% for service in all_services %}
-<div class="col">
-          <div class="card">
+<div class="row row-cols-1 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-xs-1 p-3 g-3">
+    {% for service in all_services %}
+    <div class="col mb-2">
+        <div class="card border-0">
             <img src="{{service.img.url}}" class="" alt="تصویر یافت نشد" role="img" width="100%" height="225">
+            
 
 
             <div class="card-body">
-            <h5 class="text-center"><strong>{{service}}</strong></h5>
-              <p class="card-text">{{service.desc}}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group"> 
-
+                <h5 class="text-center"><strong>{{service}}</strong></h5>
+                <p class="card-text text-muted">{{service.desc}}</p>
+                     <small class="text-body-secondary">
                         {% if service.is_active %}
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="service" value="{{ service.id }}">
-                                    <button type="submit" value="Submit" class="btn btn-sm btn-warning">انتخاب این سرویس</button>
-                                </form>
-
-                        {% else  %}
-
-                                 <button type="button" class="btn btn-sm btn-warning" disabled>غیرفعال</button>
-
-
-                        {% endif  %}
-
-
-                </div>
-                  
-                <small class="text-body-secondary">
-                {% if service.is_active %}        
- این سرویس قابل ارائه است
-                {% else  %}
-در حال حاضر امکان ارائه این سرویس وجود ندارد
-             {% endif  %}
-                </small>
-              </div>
+                        <i class="bi bi-patch-check text-green"></i>
+                        این سرویس قابل ارائه است
+                        {% else %}
+                        <i class="bi bi-patch-exclamation text-danger"></i>
+                        در حال حاضر امکان ارائه این سرویس وجود ندارد
+                        {% endif %}
+                    </small>
             </div>
-          </div>
+
+            <div class="card-body text-center">
+                    {% if service.is_active %}
+                    <form method="post"> {% csrf_token %}
+                        <input type="hidden" name="service" value="{{ service.id }}">
+                        <button type="submit" value="Submit" class="btn btn-sm btn-warning">انتخاب این سرویس</button>
+                    </form>
+                    {% else %}
+                    <button type="button" class="btn btn-sm btn-warning" disabled> غیرفعال </button>
+                    {% endif %}
+              </div>
+
         </div>
+    </div>
 
-{% endfor %}
-        </div>
-
-
+    {% endfor %}
 
 
 
-</div>
 
 
-
-{% endblock %}
+    {% endblock %}
 
 
 
@@ -104,21 +71,21 @@
 
 
 
-{% block static_js %}
+    {% block static_js %}
 
-<script>
-function checkService() {
-    
-    var selectedService = document.getElementById("id_service").value;
-    console.log(selectedService);
-    var serviceInputs = document.querySelectorAll("input[name='service']");
-    for (var i = 0; i < serviceInputs.length; i++) {
-        serviceInputs[i].value = selectedService;
-    }
-}
+    <script>
+        function checkService() {
 
-</script>
+            var selectedService = document.getElementById("id_service").value;
+            console.log(selectedService);
+            var serviceInputs = document.querySelectorAll("input[name='service']");
+            for (var i = 0; i < serviceInputs.length; i++) {
+                serviceInputs[i].value = selectedService;
+            }
+        }
 
-<!-- <script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script> -->
+    </script>
 
-{% endblock%}
+    <!-- <script src="{% static 'reservation/js/select_date_form_validation.js' %}"></script> -->
+
+    {% endblock%}
