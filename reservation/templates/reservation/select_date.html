@@ -11,91 +11,93 @@
 
 
 
-        <div class="col-12 text-center mb-3">
+<div class="col-12 text-center mb-3">
 
-            <h4 dir="auto">
-                رزرو نوبت جدید
-            </h4>
+    <h4 dir="auto">
+        رزرو نوبت جدید
+    </h4>
 
+</div>
+
+    <div class="alert alert-warning" role="alert">
+        لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
+    </div>
+
+
+
+        <div class="card bg-dark text-white shadow-lg rounded border-secondary mb-4">
+            <div class="card-body">
+                <p class="card-text p-1">  سرویس انتخاب شده: {{selected_service_name}}
+                </p>
+            </div>
         </div>
 
-        <div class="col-12">
-            <div class="col-12">
-                <div class="alert alert-warning" role="alert">
-                    لغو نوبت فقط تا 24 ساعت قبل از زمان انتخابی امکان پذیر است
-                </div>
 
-                <div class="alert alert-info" role="alert">
-                    سرویس انتخاب شده: {{selected_service_name}}
-                </div>
-
-                {% if error_message %}
-                <div class="alert alert-danger"> {{error_message}} </div>
-                {% endif %}
-                <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
-                <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
-            </div>
+    {% if error_message %}
+    <div class="alert alert-danger"> {{error_message}} </div>
+    {% endif %}
+    <div id="error-alert" class="alert alert-danger" style="display: none;"> </div>
+    <div id="empty-service-alert" class="alert alert-warning" style="display: none;"> </div>
 
 
 
-            <div class="col-12   bg-warning">
+    <div class="col-12   bg-warning">
 
 
-                <table class="table text-center table-bordered rounded-3" dir="rtl">
-                    <thead>
-                        <tr>
-                            <th scope="col">تایم</th>
-                            <th scope="col">نوبت گرفتن</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for date in dates_list %}
-                        <tr>
-                            <td> {{ date.weekday }} {{ date.date|to_jalali:'%Y/%m/%d' }} </td>
-                            <td>
+        <table class="table table-dark table-hover table-striped text-center align-middle shadow-lg rounded-3"
+            dir="rtl">
+            <thead>
+                <tr>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">نوبت گرفتن</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date in dates_list %}
+                <tr>
+                    <td> {{ date.weekday }} {{ date.date|to_jalali:'%Y/%m/%d' }} </td>
+                    <td>
 
-                                <div class="btn-group">
+                        <div class="btn-group">
 
-                                    {% if date.status == "active" %}
+                            {% if date.status == "active" %}
 
-                                    <form method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="date" id="date" value="{{ date.formatted_date }}">
-                                        <button name="btn-reserve" type="submit" value="Submit"
-                                            class="btn btn-success btn-sm">رزرو</button>
-                                    </form>
-                                    {% elif date.status == "day-off" %}
-                                    <button class="btn btn-danger btn-sm" disabled>تعطیل</button>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="date" id="date" value="{{ date.formatted_date }}">
+                                <button name="btn-reserve" type="submit" value="Submit"
+                                    class="btn btn-success btn-sm">انتخاب ساعت</button>
+                            </form>
+                            {% elif date.status == "day-off" %}
+                            <button class="btn btn-danger btn-sm" disabled>تعطیل</button>
 
-                                    {% endif %}
-
-                                    
-
-
-                                    {% if request.user.is_staff %}
-                                    <div class="px-2" ></div>
-                                    <input type="hidden" class="date-field" name="date"
-                                        value="{{ date.formatted_date }}">
-
-                                    {% if date.status == "active" %}
-                                    <button class="make-off-btn btn btn-warning btn-sm">تعطیل کردن</button>
-                                    {% elif date.status == "day-off" %}
-                                    <button class="make-on-btn btn btn-info btn-sm">باز کردن</button>
-                                    {% endif %}
-                                    {% endif %}
-                                </div>
-
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endif %}
 
 
-            </div>
 
 
-        </div>
+                            {% if request.user.is_staff %}
+                            <div class="px-2"></div>
+                            <input type="hidden" class="date-field" name="date" value="{{ date.formatted_date }}">
+
+                            {% if date.status == "active" %}
+                            <button class="make-off-btn btn btn-warning btn-sm">تعطیل کردن</button>
+                            {% elif date.status == "day-off" %}
+                            <button class="make-on-btn btn btn-info btn-sm">باز کردن</button>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+
+
 
 
 
@@ -118,52 +120,52 @@
 
 
 <script>
-   
 
-   $(document).ready(function () {
-    // برای تعطیل کردن تاریخ
-    $('.make-off-btn').click(function () {
-        var date = $(this).closest('tr').find('.date-field').val();
 
-        $.ajax({
-            url: "{% url 'reserve:make_off' %}", 
-            type: 'POST',
-            data: {
-                'date': date,
-                'csrfmiddlewaretoken': '{{ csrf_token }}', 
-            },
-            success: function (response) {
-                // alert(response.message);
-                location.reload();  
-            },
-            error: function (xhr, errmsg, err) {
-                alert('خطا: ' + errmsg);
-            }
+    $(document).ready(function () {
+        // برای تعطیل کردن تاریخ
+        $('.make-off-btn').click(function () {
+            var date = $(this).closest('tr').find('.date-field').val();
+
+            $.ajax({
+                url: "{% url 'reserve:make_off' %}",
+                type: 'POST',
+                data: {
+                    'date': date,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (response) {
+                    // alert(response.message);
+                    location.reload();
+                },
+                error: function (xhr, errmsg, err) {
+                    alert('خطا: ' + errmsg);
+                }
+            });
+        });
+
+        $('.make-on-btn').click(function () {
+            var date = $(this).closest('tr').find('.date-field').val();
+
+            $.ajax({
+                url: "{% url 'reserve:make_on' %}",
+                type: 'POST',
+                data: {
+                    'date': date,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (response) {
+
+                    // alert(response.message);
+                    location.reload();
+                },
+                error: function (xhr, errmsg, err) {
+                    var responseError = xhr.responseJSON ? xhr.responseJSON.error : 'خطا در درخواست';
+                    // alert('خطا: ' + responseError);
+                }
+            });
         });
     });
-
-    $('.make-on-btn').click(function () {
-        var date = $(this).closest('tr').find('.date-field').val();
-
-        $.ajax({
-            url: "{% url 'reserve:make_on' %}", 
-            type: 'POST',
-            data: {
-                'date': date,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-            },
-            success: function (response) {
-                
-                // alert(response.message);
-                location.reload(); 
-            },
-            error: function (xhr, errmsg, err) {
-                var responseError = xhr.responseJSON ? xhr.responseJSON.error : 'خطا در درخواست';
-                // alert('خطا: ' + responseError);
-            }
-        });
-    });
-});
 
 
 

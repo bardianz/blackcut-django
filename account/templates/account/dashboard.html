@@ -8,55 +8,53 @@
 
 
 
-        <ul class="nav justify-content-center nav-pills mb-3">
-            <li class="nav-item">
-                <a class="nav-link active bg-warning text-dark " href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'account:profile' %}">پروفایل</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link bg-warning text-dark" aria-disabled="true" data-bs-toggle="collapse"
-                    href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">کد تخفیف
-                </a>
+<ul class="nav justify-content-center nav-pills mb-3 mt-1">
+    <li class="nav-item">
+        <a class="nav-link active bg-warning text-dark " href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active bg-warning text-dark mx-2" href="{% url 'account:profile' %}">پروفایل</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link bg-warning text-dark" aria-disabled="true" data-bs-toggle="collapse" href="#collapseExample"
+            role="button" aria-expanded="false" aria-controls="collapseExample">کد تخفیف
+        </a>
 
-            </li>
+    </li>
 
-        </ul>
+</ul>
 
-        <div class="collapse mb-2" id="collapseExample">
-            <div class="card card-body bg-secondary">
-                بخش کد تخفیف به زودی فعال و قابل استفاده می‌گردد!
-            </div>
-        </div>
+<div class="collapse mb-2" id="collapseExample">
+    <div class="card card-body bg-secondary">
+        بخش کد تخفیف به زودی فعال و قابل استفاده می‌گردد!
+    </div>
+</div>
 
-        <div class="row mt-4">
-            <div class="col-sm-6 mb-3 mb-sm-0">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 mb-3 mb-sm-0">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-text p-1">تعداد کد تخفیف های شما : 0</p>
-                    </div>
-                </div>
+<div class="row mt-4">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="card bg-dark text-white shadow-lg rounded border-secondary">
+            <div class="card-body">
+                <p class="card-text p-1">تعداد نوبت های فعال : {{ len_active_reservations }}</p>
             </div>
         </div>
     </div>
-
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="card bg-dark text-white shadow-lg rounded border-secondary">
+            <div class="card-body">
+                <p class="card-text p-1">تعداد کد تخفیف های شما : 0</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<div id="all_reservations" class="d-flex justify-content-center">
-    <div class="col-md-8 mb-4">
-        <h5 class="mb-4" dir="auto">لیست نوبت‌های شما:</h5>
 
+<h5 class="mb-4 mt-4" dir="auto">لیست نوبت‌های شما:</h5>
+
+
+<div class="div border border-secondary rounded p-1">
         {% if all_reservations %}
-        <table class="table table-striped text-center align-middle shadow-lg rounded" dir="rtl">
+        <table class="table table-dark table-hover table-striped text-center align-middle shadow-lg rounded" dir="rtl">
             <thead>
                 <tr>
                     <!-- <th scope="col">#</th> -->
@@ -79,13 +77,13 @@
                         <p class="text-success">نوبت فعال</p>
 
                         {% elif i.status == 'expired' %}
-                        <p class="text-danger">منقضی شده</p>
+                        <p class="text-warning">منقضی شده</p>
 
                         {% elif i.status == 'done' %}
                         <p class="text-info">در انتظار پرداخت</p>
 
                         {% elif i.status == 'paid' %}
-                        <p class="text-dark">پرداخت شده</p>
+                        <p class="">پرداخت شده</p>
 
 
                         {% elif i.status == 'canceled' %}
@@ -96,7 +94,7 @@
 
                         {% if i.status == 'active' %}
 
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal"
                             data-bs-target="#reservationDetailModal{{ i.id }}">
                             جزئیات / لغو
                         </button>
@@ -198,7 +196,7 @@
         <div class="d-flex justify-content-center mb-4">
             <div class="col-12">
 
-                <div class="card text-center mb-3">
+                <div class="card text-center bg-dark text-white mb-3">
                     <div class="card-body">
                         <h5 class="card-title">هیچ نوبت فعالی ندارید</h5>
                         <p class="card-text fs-6"> از منوی بالا برای رزرو نوبت جدید استفاده کنید</p>
@@ -206,16 +204,18 @@
                 </div>
 
             </div>
+        </div>
 
-            {% endif %}
-
-
-
-
-
-    {% elif not user.is_authenticated %}
-    <p>You are not logged in</p>
-    {% endif %}
+    </div>
+        {% endif %}
 
 
-    {% endblock %}
+
+
+
+        {% elif not user.is_authenticated %}
+        <p>You are not logged in</p>
+        {% endif %}
+
+
+        {% endblock %}
