@@ -99,7 +99,7 @@
                         <div class="modal fade " id="reservationDetailModal{{ i.id }}" data-bs-backdrop="static"
                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                             aria-hidden="true">
-                            <div class="modal-dialog ">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content bg-dark">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="reservationDetailModalLabel"
@@ -145,14 +145,14 @@
                         <!-- Remove Modal -->
                         <div class="modal fade" id="removeModal-{{ i.id }}" tabindex="-1"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content text-dark">
+                                    <!-- <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">لغو
                                             نوبت</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
-                                    </div>
+                                    </div> -->
                                     <div class="modal-body">
                                         آیا مطمئنید که نوبت رزرو شده در تاریخ
                                         {{ i.jalali_reservation_date }}
