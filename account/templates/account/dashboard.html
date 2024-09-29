@@ -51,9 +51,8 @@
 
 <h5 class="mb-4 mt-4" dir="auto">لیست نوبت‌های شما:</h5>
 
+{% if all_reservations %}
 
-<div class="div border border-secondary rounded p-1">
-        {% if all_reservations %}
         <table class="table table-dark table-hover table-striped text-center align-middle shadow-lg rounded" dir="rtl">
             <thead>
                 <tr>
@@ -73,43 +72,42 @@
                     </td>
                     <td>{{ i.timeslot.start_time }}</td>
                     <td class="align-middle">
-                        {% if i.status == 'active' %}
-                        <p class="text-success">نوبت فعال</p>
+                        
+                        {% if i.status == 'expired' %}
+                        <div class="text-warning">منقضی شده</div>
 
-                        {% elif i.status == 'expired' %}
-                        <p class="text-warning">منقضی شده</p>
+
 
                         {% elif i.status == 'done' %}
-                        <p class="text-info">در انتظار پرداخت</p>
+                        <div class="text-info">در انتظار پرداخت</div>
 
                         {% elif i.status == 'paid' %}
-                        <p class="">پرداخت شده</p>
+                        <div class="">پرداخت شده</div>
 
 
                         {% elif i.status == 'canceled' %}
-                        <p class="text-danger">لغو شده</p>
-                        {% endif %}
+                        <div class="text-danger">لغو شده</div>
 
 
 
-                        {% if i.status == 'active' %}
+                        {% elif i.status == 'active' %}
 
-                        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                             data-bs-target="#reservationDetailModal{{ i.id }}">
-                            جزئیات / لغو
+                            نوبت فعال
                         </button>
-                        <div class="modal fade" id="reservationDetailModal{{ i.id }}" data-bs-backdrop="static"
+                        <div class="modal fade " id="reservationDetailModal{{ i.id }}" data-bs-backdrop="static"
                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
+                            <div class="modal-dialog ">
+                                <div class="modal-content bg-dark">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="reservationDetailModalLabel"
                                             style="font-family: 'Vazir';">نوبت رزرو شده</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body" dir="rtl">
+                                    <div class="modal-body " dir="rtl">
 
                                         <p> تاریخ
                                             انتخابی: {{ i.day }} {{ i.jalali_reservation_date }} </p>
@@ -188,25 +186,22 @@
             </tbody>
         </table>
 
-        {% else %}
 
+    {% else %}
 
+    <div class="d-flex justify-content-center mb-4">
+        <div class="col-12">
 
-
-        <div class="d-flex justify-content-center mb-4">
-            <div class="col-12">
-
-                <div class="card text-center bg-dark text-white mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">هیچ نوبت فعالی ندارید</h5>
-                        <p class="card-text fs-6"> از منوی بالا برای رزرو نوبت جدید استفاده کنید</p>
-                    </div>
+            <div class="card text-center bg-dark text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">هیچ نوبتی تابحال برای شما رزرو نشده</h5>
+                    <p class="card-text fs-6"> از منوی بالا برای رزرو نوبت جدید استفاده کنید</p>
                 </div>
-
             </div>
-        </div>
 
+        </div>
     </div>
+
         {% endif %}
 
 

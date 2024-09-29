@@ -6,6 +6,10 @@ class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="عنوان دسته بندی")
     rank = models.IntegerField(verbose_name='رتبه قرارگیری',default=0,)
 
+    @property
+    def products(self):
+        return Product.objects.filter(category=self)
+
     class Meta:
         verbose_name = "دسته بندی"
         verbose_name_plural = "دسته بندی ها"

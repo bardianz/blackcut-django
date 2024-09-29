@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from reservation.models import Appointment
-from shop.models import Product
-from .serializers import AppointmentSerializer,ProductsSerializer
-from datetime import datetime, date
+from shop.models import Category, Product
+from .serializers import AppointmentSerializer, CategorySerializer,ProductsSerializer
+from datetime import date
+from rest_framework import generics
 
 
 class ActiveAppointments(APIView):
@@ -156,3 +157,10 @@ class MakeExpiredAppointment(APIView):
             return Response({'message': 'Product added successfully'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
             return Response({'message': 'Appointment does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+
+
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer

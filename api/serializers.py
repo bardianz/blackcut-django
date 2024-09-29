@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from reservation.models import Appointment
-from shop.models import Product
+from shop.models import Category, Product
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -19,7 +19,16 @@ class ProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["id","name", "img", "price"]
+        fields = ["id","name", "img", "price", "quantity"]
 
     def get_price(self, obj):
         return format(obj.price, ',')
+
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    products = ProductsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ['title', 'rank', 'products']
