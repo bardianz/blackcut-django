@@ -31,8 +31,20 @@ class ActiveAppointments(APIView):
         appointments = self.get_queryset()
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
-    
 
+
+class DoneAppointments(APIView):
+    http_method_names = ['get', ]
+
+    def get_queryset(self):
+        return Appointment.objects.filter(status="done").order_by('date', 'timeslot__start_time')
+
+
+
+    def get(self, request):
+        appointments = self.get_queryset()
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)
 
 
 class AllAppointments(APIView):

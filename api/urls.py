@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import ActiveAppointments,AllProducts,AddProductToAppointment,AllAppointments, CategoryListView,remove_product_from_appointment,MakeDoneAppointment,MakePaidAppointment
+from .views import ActiveAppointments,AllProducts,DoneAppointments,AddProductToAppointment,AllAppointments, CategoryListView,remove_product_from_appointment,MakeDoneAppointment,MakePaidAppointment
 
 urlpatterns = [
     path('allproducts/', AllProducts.as_view(), name='allproducts'),
     path('activeappointments/', ActiveAppointments.as_view(), name='activeappointments'),
+    path('doneappointments/', DoneAppointments.as_view(), name='doneappointments'),
     path('allappointments/', AllAppointments.as_view(), name='allappointments'),
     path('add_product_to_appointment/', AddProductToAppointment.as_view(), name='add_product_to_appointment'),
     path('remove_product_from_appointment/', remove_product_from_appointment, name='remove_product_from_appointment'),

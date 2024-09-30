@@ -120,6 +120,7 @@ def login_view(request):
             return redirect("account:dashboard")
 
         context = {"error_message": "یوزرنیم یا پسورد اشتباه است"}
+        messages.warning(request, 'یوزرنیم و پسورد  مطابقت ندارند!')
         return render(request, template_name, context=context)
 
 
