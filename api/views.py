@@ -50,7 +50,7 @@ class DoneAppointments(APIView):
 class AllAppointments(APIView):
     def get_queryset(self):
         current_date = date.today()
-        all_reservations = Appointment.objects.filter(is_active=True).order_by('date', 'timeslot__start_time')
+        all_reservations = Appointment.objects.exclude(status__in=["canceled", "expired"]).order_by('date', 'timeslot__start_time')[:20]
 
         for appointment in all_reservations:
             if appointment.is_active == True:
