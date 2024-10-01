@@ -22,13 +22,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return user_profile.phone_number if user_profile else None
 
     def get_profile_picture(self, obj):
-        request = self.context.get('request')
         user_profile = getattr(obj.user, 'userprofile', None)  # استفاده از getattr برای دسترسی به UserProfile
-        # return user_profile.profile_picture if user_profile else f"{settings.STATIC_URL}/account/no-picture.png"
-        if user_profile and user_profile.profile_picture:
-            return user_profile
-        else:
-            return request.build_absolute_uri(f"{settings.STATIC_URL}account/no-picture.png")
+        return user_profile.profile_picture if user_profile else "https://blackcut.pythonanywhere.com/static/account/no-picture.png"
 
 class ProductsSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField()
