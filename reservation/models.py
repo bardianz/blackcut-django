@@ -43,8 +43,8 @@ class Service(models.Model):
 
 class TimeSlot(models.Model):
     class Meta:
-        verbose_name = "بازه زمانی"
-        verbose_name_plural = "بازه های زمانی"
+        verbose_name = "تایم"
+        verbose_name_plural = "تایم ها"
 
     start_time = models.TimeField(null=True, unique=True)
     finish_time = models.TimeField(null=True, blank=True)
