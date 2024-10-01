@@ -12,7 +12,6 @@ from account.utils import check_is_persian
 def cancel_reservation(request, id):
     if request.method == "POST":
         appointment = Appointment.objects.get(id=id)
-        appointment.is_canceled = True
         appointment.status = "canceled"
         appointment.save()
         return redirect("account:dashboard")

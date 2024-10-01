@@ -60,8 +60,6 @@ class AllAppointments(APIView):
 
 
 
-
-
 class AllProducts(APIView):
     def get_queryset(self):
         return Product.objects.all()

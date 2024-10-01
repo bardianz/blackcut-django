@@ -82,8 +82,6 @@ class Appointment(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=25, default="active", verbose_name="وضعیت")
 
     def save(self, *args, **kwargs):
-        if self.is_active:
-            self.status = "active"
 
         if self.status == "active":
             self.is_active = True
