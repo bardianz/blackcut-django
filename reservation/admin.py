@@ -4,18 +4,21 @@ from .models import Service, TimeSlot, Appointment
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('service_name', 'is_active')
     list_filter = ('is_active',)
+    list_editable = ('is_active',)
     search_fields = ('service_name',)
     list_per_page = 20
 
 class TimeSlotAdmin(admin.ModelAdmin):
     list_display = ('start_time', 'finish_time', 'is_active')
     list_filter = ('is_active',)
+    list_editable = ('is_active',)
     search_fields = ('start_time', 'finish_time')
     list_per_page = 20
 
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ('user_identifier', 'service', 'jalali_reservation_date', 'timeslot', 'status')
     list_filter = ('service', 'date', 'status')
+    list_editable = ('status',)
     search_fields = ('user_identifier', 'jalali_reservation_date', 'user__first_name')
     list_per_page = 20
 

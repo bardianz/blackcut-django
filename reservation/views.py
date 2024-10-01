@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Appointment, Dayoff, Service, TimeSlot
-from .utils import date_dict_with_persian_weekday,is_future_date
+from .utils import date_dict_with_persian_weekday, is_future_date
 from django.contrib import messages
 from account.utils import check_is_persian
-from django.core.exceptions import ObjectDoesNotExist
+
 
 @login_required
 def cancel_reservation(request, id):
@@ -17,24 +17,22 @@ def cancel_reservation(request, id):
         appointment.save()
         return redirect("account:dashboard")
 
+
 @login_required
 def choose_service(request):
+    user_first_name = request.user.first_name
+    user_last_name = request.user.last_name
 
-
-    user_first_name = request.user.first_name 
-    user_last_name = request.user.last_name 
-
-
-    if not user_first_name and not user_last_name or not check_is_persian(user_first_name) or not check_is_persian(user_last_name) :
+    if not user_first_name and not user_last_name or not check_is_persian(user_first_name) or not check_is_persian(
+            user_last_name):
         messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل بطور کامل و فارسی تکمیل کنید')
         return redirect("account:dashboard")
-    
+
     user_active_appointments = Appointment.objects.filter(user=request.user, is_active=True).count()
     if user_active_appointments > 3:
         messages.warning(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
         return redirect("account:dashboard")
 
-    
     template_name = "reservation/select_service.html"
     context = {
         "all_services": Service.objects.filter
@@ -45,31 +43,26 @@ def choose_service(request):
         if service:
             return redirect("reserve:select_date", service=service)
 
-
-
     return render(request, template_name, context)
 
 
-
 @login_required
-def choose_date_view(request,service):
-
+def choose_date_view(request, service):
     if request.method == "POST":
-  
+
         date = request.POST.get("date")
-        
+
         if not service or not date:
-            context["error_message"] = "سرویس یا تاریخ انتخاب نشده"
-            return render(request, template_name, context)
+            messages.error(request, 'سرویس یا تاریخ به درستی انتخاب نشده')
+            return redirect("reserve:select_date")
 
         if is_future_date(date):
             return redirect("reserve:select_time", date=date, service=service)
         else:
-            context["error_message"] = "لطفاً تاریخی قبل از امروز را انتخاب نکنید"
-
+            messages.error(request, 'لطفاً تاریخی قبل از امروز را انتخاب نکنید')
+            return redirect("reserve:select_date")
 
     template_name = "reservation/select_date.html"
-
 
     off_days = Dayoff.objects.all()
     all_next_days = date_dict_with_persian_weekday(days_number=14)
@@ -79,7 +72,6 @@ def choose_date_view(request,service):
         for j in all_next_days:
             if str(i) == str(j['formatted_date']):
                 j['status'] = "day-off"
-
 
     context = {
         "dates_list": all_next_days,
@@ -91,21 +83,19 @@ def choose_date_view(request,service):
     return render(request, template_name, context)
 
 
-
-
 @login_required
 def choose_time_view(request, date, service):
     if request.method == "GET":
 
-
-        all_timeslots = TimeSlot.objects.order_by("start_time").all()
+        all_timeslots = TimeSlot.objects.filter(is_active=True).order_by("start_time").all()
 
         timeslots = []
 
         for i in all_timeslots:
             start_time_formatted = i.start_time.strftime("%H:%M")
-            is_reserved = Appointment.objects.filter(date=date,timeslot=i,is_active=True,is_canceled=False,service=service
-            ).exists()
+            is_reserved = Appointment.objects.filter(date=date, timeslot=i, is_active=True, is_canceled=False,
+                                                     service=service
+                                                     ).exists()
 
             timeslots.append(
                 {
@@ -118,7 +108,7 @@ def choose_time_view(request, date, service):
         context = {
             "total_time_slots": timeslots,
             "selected_date": date,
-            "formatted_date" : datetime.strptime(date, '%Y-%m-%d').date(),
+            "formatted_date": datetime.strptime(date, '%Y-%m-%d').date(),
             "service": service,
             "selected_service_name": Service.objects.get(id=service),
         }
@@ -143,9 +133,6 @@ def choose_time_view(request, date, service):
     return redirect("reserve:select_date")
 
 
-
-
-
 @login_required
 def make_off(request):
     if not request.user.is_staff:
@@ -159,8 +146,9 @@ def make_off(request):
     if not date:
         return JsonResponse({'error': 'No date provided'}, status=400)
 
-    if Appointment.objects.filter(date=date,status="active").exists():
-        messages.error(request, 'خطا: در روزی که انتخاب شده، نوبت هایی فعال هستند. تا زمانی که فعال باشند امکان تعطیل کردن روز وجود ندارد')
+    if Appointment.objects.filter(date=date, status="active").exists():
+        messages.error(request,
+                       'خطا: در روزی که انتخاب شده، نوبت هایی فعال هستند. تا زمانی که فعال باشند امکان تعطیل کردن روز وجود ندارد')
         return HttpResponseRedirect('/')
         # return JsonRلهesponse({'error': 'Appointments exist for this date. Cannot mark as off!'}, status=400)
 
@@ -184,7 +172,6 @@ def make_on(request):
     if not date:
         return JsonResponse({'error': 'No date provided'}, status=400)
 
-    # حذف تمام رکوردهای مرتبط با تاریخ
     deleted_count, _ = Dayoff.objects.filter(date=date).delete()
 
     if deleted_count > 0:
