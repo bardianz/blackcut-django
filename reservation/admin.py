@@ -10,6 +10,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class TimeSlotAdmin(admin.ModelAdmin):
     list_display = ('start_time', 'finish_time', 'is_active')
+    ordering = ('start_time',)
     list_filter = ('is_active',)
     list_editable = ('is_active',)
     search_fields = ('start_time', 'finish_time')
