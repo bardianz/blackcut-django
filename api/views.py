@@ -14,12 +14,11 @@ class ActiveAppointments(APIView):
     def get_queryset(self):
         current_date = date.today()
         
-        all_reservations = Appointment.objects.filter(is_active=True).order_by('date', 'timeslot__start_time')
+        all_reservations = Appointment.objects.filter(status="active").order_by('date', 'timeslot__start_time')
         active_reservations= []
         for appointment in all_reservations:
-            if appointment.is_active == True:
+            if appointment.status == "active":
                 if appointment.date < current_date:
-                    appointment.is_active=False
                     appointment.status="expired"
                     appointment.save()
                 else:
@@ -50,15 +49,7 @@ class DoneAppointments(APIView):
 class AllAppointments(APIView):
     def get_queryset(self):
         current_date = date.today()
-        all_reservations = Appointment.objects.exclude(status__in=["canceled", "expired"]).order_by('date', 'timeslot__start_time')[:20]
-
-        for appointment in all_reservations:
-            if appointment.is_active == True:
-                if appointment.date < current_date:
-                    appointment.is_active=False
-                    appointment.status="expired"
-                    appointment.save()
-
+        all_reservations = Appointment.objects.exclude(status__in=["canceled", "expired"]).order_by('-date', 'timeslot__start_time')[:20]
         return all_reservations
 
 
