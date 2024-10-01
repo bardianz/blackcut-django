@@ -43,16 +43,15 @@ class Dashboard(View):
         
         current_date = date.today()
 
-        all_reservations = Appointment.objects.filter(user=request.user).order_by('-is_active','-date','is_expired').all()
+        all_reservations = Appointment.objects.filter(user=request.user).order_by('status','-date','is_expired').all()
 
         for appointment in all_reservations:
             appointment.reserve_id = appointment.id
 
         active_reservations = []
         for appointment in all_reservations:
-            if appointment.is_active == True:
+            if appointment.status == "active":
                 if appointment.date < current_date:
-                    appointment.is_active=False
                     appointment.status="expired"
                     appointment.save()
                 else:

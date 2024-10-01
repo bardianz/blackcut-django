@@ -74,10 +74,10 @@ class Appointment(models.Model):
 
     STATUS_CHOICES = [
         ("active", "فعال"),
-        ("canceled", "لغو شده"),
-        ("expired", "منقضی"),
         ("done", "انجام شده"),
         ("paid", "پرداخت شده"),
+        ("expired", "منقضی"),
+        ("canceled", "لغو شده"),
     ]
     status = models.CharField(choices=STATUS_CHOICES, max_length=25, default="active", verbose_name="وضعیت")
 
