@@ -9,7 +9,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 class TimeSlotAdmin(admin.ModelAdmin):
-    list_display = ('start_time', 'finish_time', 'is_active')
+    list_display = ("start_time", "is_active")
     ordering = ('start_time',)
     list_filter = ('is_active',)
     list_editable = ('is_active',)

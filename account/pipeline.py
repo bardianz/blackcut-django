@@ -1,3 +1,6 @@
+from account.models import UserProfile
+
+
 def prevent_name_update(strategy, details, user=None, *args, **kwargs):
     if user:
         if user.first_name and user.last_name:
@@ -7,11 +10,10 @@ def prevent_name_update(strategy, details, user=None, *args, **kwargs):
 
 
 def save_profile_picture(backend, user, response, *args, **kwargs):
-    try:
-        if backend.name == 'google-oauth2':
-            picture_url = response.get('picture')  # آدرس عکس پروفایل از Google
-            if picture_url and not user.profile_picture:
-                user.profile_picture = picture_url
-                user.save()
-    except:
-        print("Error")
+    if backend.name == 'google-oauth2':
+        picture_url = response.get('picture')  # آدرس عکس پروفایل از Google
+        if picture_url:
+            # در اینجا باید به UserProfile دسترسی پیدا کنید
+            profile, created = UserProfile.objects.get_or_create(user=user)  # به پروفایل کاربر دسترسی پیدا کنید
+            profile.profile_picture = picture_url
+            profile.save()
