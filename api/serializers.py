@@ -2,6 +2,7 @@ from rest_framework import serializers
 from reservation.models import Appointment
 from shop.models import Category, Product
 
+from django.conf import settings
 
 class AppointmentSerializer(serializers.ModelSerializer):
     jalali_reservation_date = serializers.CharField(read_only=True)
@@ -22,7 +23,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def get_profile_picture(self, obj):
         user_profile = getattr(obj.user, 'userprofile', None)  # استفاده از getattr برای دسترسی به UserProfile
-        return user_profile.profile_picture if user_profile else "https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg"
+        return user_profile.profile_picture if user_profile else f"{settings.STATIC_URL}/account/no-picture.png"
 
 class ProductsSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField()

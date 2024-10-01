@@ -12,9 +12,8 @@ class UserProfileInline(admin.StackedInline):
 # ترکیب اطلاعات کاربر و پروفایل
 class CustomUserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
-    list_display = ('username', 'first_name', 'last_name', 'email', 'get_phone_number', 'display_profile_picture')
+    list_display = ('display_profile_picture' , 'first_name', 'last_name','username', 'get_phone_number' ,'email', )
 
-    # نمایش شماره تلفن از مدل UserProfile
     def get_phone_number(self, obj):
         return obj.userprofile.phone_number if obj.userprofile else 'ندارد'
 
