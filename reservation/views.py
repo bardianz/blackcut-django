@@ -87,12 +87,21 @@ def choose_time_view(request, date, service):
     if request.method == "GET":
 
         all_timeslots = TimeSlot.objects.filter(is_active=True).order_by("start_time").all()
+        current_date = str(datetime.today().date())
+        current_time = datetime.now().strftime("%H:%M")
+
+
 
         timeslots = []
 
         for i in all_timeslots:
             start_time_formatted = i.start_time.strftime("%H:%M")
-            is_reserved = Appointment.objects.filter(date=date, timeslot=i, status="active", service=service).exists()
+            is_reserved = Appointment.objects.filter(
+                date=date,
+                timeslot=i,
+                status__in=["active", "done", "paid"],
+                service=service
+            ).exists()
 
             timeslots.append(
                 {
@@ -101,6 +110,8 @@ def choose_time_view(request, date, service):
                     "status": "Reserved" if is_reserved else "Available",
                 }
             )
+        if current_date == date:
+            timeslots = [i for i in timeslots if i['start_time_formatted'] >= current_time]
 
         context = {
             "total_time_slots": timeslots,
@@ -120,7 +131,8 @@ def choose_time_view(request, date, service):
             existing_appointment = Appointment.objects.filter(
                 date=date,
                 timeslot=selected_time,
-                service=Service.objects.get(id=service)
+                service=Service.objects.get(id=service),
+                status__in = ["active", "done", "paid"]
             ).exists()
 
             if existing_appointment:
