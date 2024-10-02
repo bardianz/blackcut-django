@@ -56,9 +56,7 @@ class TimeSlot(models.Model):
 
 
 class Appointment(models.Model):
-    class Meta:
-        verbose_name = "نوبت"
-        verbose_name_plural = "نوبت‌ها"
+
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="کاربر")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name="سرویس")
@@ -80,6 +78,17 @@ class Appointment(models.Model):
         ("canceled", "لغو شده"),
     ]
     status = models.CharField(choices=STATUS_CHOICES, max_length=25, default="active", verbose_name="وضعیت")
+
+    class Meta:
+        verbose_name = "نوبت"
+        verbose_name_plural = "نوبت‌ها"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['date', 'timeslot', 'service'],
+                condition=models.Q(status__in=["active", "done", "paid"]),
+                name='unique_appointment'
+            )
+        ]
 
     def save(self, *args, **kwargs):
 
