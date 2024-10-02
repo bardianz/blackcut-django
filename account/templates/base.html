@@ -87,11 +87,11 @@
               {{ user.first_name }} {{ user.last_name }}
             </a>
             <ul class="dropdown-menu">
-
-              <li><a class="dropdown-item" href="{% url 'account:profile' %}">مشاهده حساب</a></li>
               {% if request.user.is_staff %}
               <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank">پنل ادمین</a></li>
+<li><a class="dropdown-item" href="{% url 'admin:auth_user_changelist' %}" target="_blank">لیست کاربران</a></li>
               {% endif %}
+              <li><a class="dropdown-item" href="{% url 'account:profile' %}">مشاهده حساب</a></li>
               <li><a class="dropdown-item" href="{% url 'account:logout' %}">خروج</a></li>
             </ul>
           </li>
