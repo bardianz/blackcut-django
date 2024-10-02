@@ -58,6 +58,7 @@
                 <tr>
                     <!-- <th scope="col">#</th> -->
                     <th scope="col">سرویس</th>
+                    <th scope="col">تاریخ</th>
                     <th scope="col">تایم</th>
                     <th scope="col">وضعیت</th>
                 </tr>
@@ -67,8 +68,9 @@
                 <tr>
                     <td dir="rtl"> {{ i.service }}</td>
                     <td dir="ltr">
-                        {{ i.jalali_reservation_date }} {{ i.timeslot.start_time }}
+                        {{ i.jalali_reservation_date }}
                     </td>
+                    <td>{{ i.timeslot.start_time }}</td>
                     <td class="align-middle">
                         
                         {% if i.status == 'expired' %}

@@ -92,9 +92,7 @@ def choose_time_view(request, date, service):
 
         for i in all_timeslots:
             start_time_formatted = i.start_time.strftime("%H:%M")
-            is_reserved = Appointment.objects.filter(date=date, timeslot=i, is_active=True, is_canceled=False,
-                                                     service=service
-                                                     ).exists()
+            is_reserved = Appointment.objects.filter(date=date, timeslot=i, status="active", service=service).exists()
 
             timeslots.append(
                 {
@@ -118,6 +116,16 @@ def choose_time_view(request, date, service):
         time = request.POST.get("time")
         if time:
             selected_time = TimeSlot.objects.get(start_time=time)
+
+            existing_appointment = Appointment.objects.filter(
+                date=date,
+                timeslot=selected_time,
+                service=Service.objects.get(id=service)
+            ).exists()
+
+            if existing_appointment:
+                messages.error(request, 'این نوبت قبلاً توسط کاربر دیگری رزرو شده است.')
+                return redirect("account:dashboard")
 
             appoinment = Appointment(
                 date=date,
