@@ -21,7 +21,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'service', 'date', )
     list_editable = ('status',)
     search_fields = ('user_identifier', 'jalali_reservation_date', 'user__first_name')
-    list_per_page = 20
+    list_per_page = 10
 
     def user_identifier(self, obj):
         return obj.user_identifier()
