@@ -5,6 +5,7 @@ from .models import UserProfile
 from django.utils.html import mark_safe
 from django.urls import reverse
 
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False

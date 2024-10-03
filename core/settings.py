@@ -30,12 +30,13 @@ ALLOWED_HOSTS += config(
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin.apps.AdminConfig",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+           
+    'django.contrib.admin',  
+    'account.apps.CustomAuthConfig',  # Custom for changing label in admin panel
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 
     'rest_framework',
 

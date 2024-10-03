@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy
 from jalali_date import date2jalali
+from django.core.exceptions import ValidationError
 
 from shop.models import Product
 from utils.persian_date_convertor import persian_date_string_convertor
@@ -90,7 +91,22 @@ class Appointment(models.Model):
             )
         ]
 
+    def clean(self):
+        if self.status == "canceled" or self.status=="expired":
+            return
+        
+
+        if Appointment.objects.filter(
+            date=self.date,
+            timeslot=self.timeslot,
+            service=self.service,
+            status__in=["active", "done", "paid"]
+        ).exclude(id=self.id).exists():
+            raise ValidationError(gettext_lazy('این نوبت قبلاً رزرو شده است. لطفاً زمان دیگری را انتخاب کنید.'))
+
+
     def save(self, *args, **kwargs):
+        self.clean()
 
         if self.status == "active":
             self.is_active = True
@@ -107,6 +123,7 @@ class Appointment(models.Model):
         elif self.status == "done":
             self.is_done = True
 
+        
         super().save(*args, **kwargs)
 
     def jalali_reservation_date(self):
