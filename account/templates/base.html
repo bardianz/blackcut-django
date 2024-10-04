@@ -77,8 +77,8 @@
 
 
             <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" class="ml-2">
-              <img style="display:inline-block; width:30px; height:30px; border-radius:50px"
-                src="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg" />
+              <img style="display:inline-block; width:30px; height:30px; border-radius:40px"
+                src="{% if request.user.userprofile and request.user.userprofile.profile_picture %}{{ request.user.userprofile.profile_picture }}{% else %}https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg{% endif %}" />
 
             </a>
             <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown"
@@ -89,7 +89,8 @@
             <ul class="dropdown-menu">
               {% if request.user.is_staff %}
               <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank">پنل ادمین</a></li>
-<li><a class="dropdown-item" href="{% url 'admin:auth_user_changelist' %}" target="_blank">لیست کاربران</a></li>
+              <li><a class="dropdown-item" href="{% url 'admin:auth_user_changelist' %}" target="_blank">لیست
+                  کاربران</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="{% url 'account:profile' %}">مشاهده حساب</a></li>
               <li><a class="dropdown-item" href="{% url 'account:logout' %}">خروج</a></li>

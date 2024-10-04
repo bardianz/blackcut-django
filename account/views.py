@@ -97,6 +97,7 @@ def logout_view(request):
     if request.method == "GET":
         if request.user.is_authenticated:
             logout(request=request)
+            messages.info(request, "با موفقیت از اکانت خود خارج شدید")
             return redirect("account:login")
 
 

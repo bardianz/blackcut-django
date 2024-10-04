@@ -14,6 +14,8 @@ class UserProfileInline(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
     list_display = ('display_profile_picture', 'full_name_link', 'username', 'get_phone_number', 'email')
+    ordering = ('-date_joined',)
+
 
     def full_name_link(self, obj):
         full_name = f"{obj.first_name} {obj.last_name}"
