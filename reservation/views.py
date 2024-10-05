@@ -27,7 +27,7 @@ def choose_service(request):
         messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل بطور کامل و فارسی تکمیل کنید')
         return redirect("account:dashboard")
 
-    user_active_appointments = Appointment.objects.filter(user=request.user, is_active=True).count()
+    user_active_appointments = Appointment.objects.filter(user=request.user, status = "active").count()
     if user_active_appointments > 3:
         messages.warning(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
         return redirect("account:dashboard")
