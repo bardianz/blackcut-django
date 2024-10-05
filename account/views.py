@@ -43,7 +43,7 @@ class Dashboard(View):
         
         current_date = date.today()
 
-        all_reservations = Appointment.objects.filter(user=request.user).order_by('status','-date','is_expired').all()
+        all_reservations = Appointment.objects.filter(user=request.user).order_by('-date','status',).all()
 
         for appointment in all_reservations:
             appointment.reserve_id = appointment.id
