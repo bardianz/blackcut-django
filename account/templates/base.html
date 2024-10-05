@@ -154,11 +154,11 @@
         <ul class="dropdown-menu" style="right: 0;" dir="rtl">
           {% if user.is_authenticated %}
             {% if request.user.is_staff %}
-              <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank">پنل ادمین</a></li>
+              <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank">مدیریت</a></li>
               <li><a class="dropdown-item" href="{% url 'admin:auth_user_changelist' %}" target="_blank">لیست کاربران</a></li>
             {% endif %}
-            <li><a class="dropdown-item" href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a></li>
             <li><a class="dropdown-item" href="{% url 'account:dashboard' %}">پنل کاربری</a></li>
+            <li><a class="dropdown-item" href="{% url 'reserve:reserve' %}">رزرو نوبت جدید</a></li>
             <li><a class="dropdown-item" href="{% url 'account:profile' %}">پروفایل</a></li>
             <li><a class="dropdown-item" href="{% url 'account:logout' %}">خروج</a></li>
           {% else %}
