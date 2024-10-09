@@ -20,7 +20,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display = ('user_identifier', 'service', 'jalali_reservation_date', 'timeslot', 'status')
     list_filter = ('status', 'service', 'date', )
     list_editable = ('status',)
-    search_fields = ('user_identifier', 'jalali_reservation_date', 'user__first_name')
+    search_fields = ('user__last_name', 'user__first_name')
     list_per_page = 10
 
     def user_identifier(self, obj):
