@@ -27,10 +27,10 @@ def choose_service(request):
         messages.error(request, 'لطفا نام و نام خانوادگی خود را در قسمت پروفایل بطور کامل و فارسی تکمیل کنید')
         return redirect("account:dashboard")
 
-    # user_active_appointments = Appointment.objects.filter(user=request.user, status = "active").count()
-    # if user_active_appointments > 3:
-    #     messages.warning(request, 'نوبت های فعال شما بیش از حد مجاز است. لطفا آن ها را کنترل کنید')
-    #     return redirect("account:dashboard")
+    user_active_appointments = Appointment.objects.filter(user=request.user, status = "active").count()
+    if not (request.user.is_superuser or request.user.is_staff) and user_active_appointments > 3:
+        messages.warning(request, 'نوبت‌های فعال شما بیش از حد مجاز است. لطفا آن‌ها را کنترل کنید')
+        return redirect("account:dashboard")
 
     template_name = "reservation/select_service.html"
     context = {
@@ -154,7 +154,7 @@ def choose_time_view(request, date, service):
 
 @login_required
 def make_off(request):
-    if not request.user.is_staff:
+    if not request.user.is_superuser:
         return JsonResponse({'error': 'Not Staff User!'}, status=403)
 
     if request.method != 'POST':
@@ -180,7 +180,7 @@ def make_off(request):
 
 @login_required
 def make_on(request):
-    if not request.user.is_staff:
+    if not request.user.is_superuser:
         return JsonResponse({'error': 'Not Staff User!'}, status=403)
 
     if request.method != 'POST':

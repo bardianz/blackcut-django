@@ -6,11 +6,6 @@
 
 {% block content %}
 
-
-
-
-
-
 <div class="col-12 text-center mb-3">
 
     <h4 dir="auto">
@@ -75,8 +70,7 @@
 
 
 
-
-                            {% if request.user.is_staff %}
+                            {% if request.user.is_superuser%}
                             <div class="px-2"></div>
                             <input type="hidden" class="date-field" name="date" value="{{ date.formatted_date }}">
 

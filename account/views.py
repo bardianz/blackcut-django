@@ -117,7 +117,10 @@ def login_view(request):
             return redirect('account:login') 
         if user is not None:
             login(request=request, user=user)
-            return redirect("account:dashboard")
+            if  request.user.is_staff or request.user.is_superuser:
+                return redirect("admin:index")
+            else:
+                return redirect("account:dashboard")
 
         context = {"error_message": "یوزرنیم یا پسورد اشتباه است"}
         messages.warning(request, 'یوزرنیم و پسورد  مطابقت ندارند!')

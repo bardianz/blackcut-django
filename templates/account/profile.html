@@ -2,15 +2,6 @@
 
 {% block content %}
 
-
-
-
-
-
-
-
-
-
         <h4 dir="rtl">
             پروفایل
         </h4>
@@ -20,21 +11,6 @@
 
 
         <hr class="hr mt-4 mb-4  pb-2" />
-
-
-        <div class="div">
-            {% for message in messages %}
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <div id="form_errors">
-                    <strong>{{ message }}</strong>
-
-                </div>
-            </div>
-            {% endfor%}
-        </div>
-
-
-
 
 
         <form method="post" class="row g-3" dir="rtl">
@@ -49,6 +25,11 @@
             <div class="col-md-12 text-center mt-4">
                 <button type="submit" class="btn btn-warning">ثبت تغییرات</button>
             </div>
+
+
+            {% if user.has_usable_password %}
+            {% endif %}
+
         </form>
 
 
