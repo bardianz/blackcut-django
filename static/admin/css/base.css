@@ -2,6 +2,12 @@
     DJANGO Admin styles
 */
 
+
+@font-face { font-family: Vazir; src: url('../../fonts/IranNastaliq.ttf'); } 
+@font-face { font-family: IranNastaliq; src: url('../../fonts/Vazir.ttf'); } 
+
+
+
 /* VARIABLE DEFINITIONS */
 html[data-theme="light"],
 :root {
@@ -56,6 +62,8 @@ html[data-theme="light"],
     --object-tools-hover-bg: var(--close-button-hover-bg);
 
     --font-family-primary:
+        IranNastaliq,
+        "IranNastaliq",
         "Segoe UI",
         system-ui,
         Roboto,
