@@ -37,6 +37,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated and request.user.is_staff %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">صفحه مدیریت</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'admin:auth_user_changelist' %}" target="_blank">لیست کاربران</a></li>
+                    {% endif %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'account:dashboard' %}">پنل کاربری</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'reserve:reserve' %}">رزرو نوبت</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">درباره ما</a></li>

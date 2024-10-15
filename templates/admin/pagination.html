@@ -6,9 +6,10 @@
     {% paginator_number cl i %}
 {% endfor %}
 {% endif %}
-{{ cl.result_count }} {% if cl.result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
-{% if show_all_url %}<a href="{{ show_all_url }}" class="showall">{% translate 'Show all' %}</a>{% endif %}
 </p>
 <p>
+    {{ cl.result_count }} {% if cl.result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
+    {% if show_all_url %}<a href="{{ show_all_url }}" class="showall" style="margin-right: 10px; margin-left: 10px;">{% translate 'Show all' %}</a>{% endif %}
     {% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="default" value="{% translate 'Save' %}">{% endif %}
 </p>
+
