@@ -1,5 +1,21 @@
 from datetime import datetime,timedelta
+from .models import Appointment
 from utils.persian_weekday import convert_to_persian_weekday
+
+
+def has_exceeded_active_appointments_limit(user, limit=3):
+    """Check if a user has exceeded the active appointments limit."""
+    user_active_appointments = Appointment.objects.filter(user=user, status="active").count()
+    return user_active_appointments >= limit
+
+def is_timeslot_reserved(date, timeslot, service):
+    """Check if a timeslot is already reserved for a specific date and service."""
+    return Appointment.objects.filter(
+        date=date,
+        timeslot=timeslot,
+        status__in=["active", "done", "paid"],
+        service=service
+    ).exists()
 
 
 def date_generator(days_number:int):
