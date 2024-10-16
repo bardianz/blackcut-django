@@ -9,9 +9,9 @@
 
             <div id="google-login">
 
-                <p dir="rtl">
+                <h4 class="mb-2 pb-2" dir="rtl">
                     ورود از طریق حساب گوگل:
-                </p>
+                </h4>
 
                 <div class="text-center pb-2" dir="ltr">
                     <!-- <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}" role="button">ادامه با گوگل</a> -->
@@ -41,14 +41,15 @@
 
 
 
-            <p class="mb-2 pb-2" dir="rtl">
+            <h3 class="mb-2 pb-2" dir="rtl">
                 ورود بدون گوگل:
-            </p>
+            </h3>
 
 
             
             <p class="fs-6 mb-2 pb-2" dir="rtl">
-             حساب کاربری ندارید؟ <a class="link-warning link-underline-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url "account:register" %}"> همین حالا ثبت نام کنید</a>
+             تاکنون حساب کاربری نساخته‌اید؟ 
+             <a class="btn btn-warning btn-sm link-underline-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url "account:register" %}"> ثبت نام </a>
             </p>
 
             <form method="post">
