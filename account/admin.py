@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from django.utils.html import mark_safe
 from django.urls import reverse
+from social_django.models import Association, Nonce, UserSocialAuth
+
+
+admin.site.unregister(Association)
+admin.site.unregister(Nonce)
+admin.site.unregister(UserSocialAuth)
 
 
 class UserProfileInline(admin.StackedInline):
