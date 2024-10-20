@@ -157,3 +157,9 @@ class Dayoff(models.Model):
     class Meta:
         verbose_name = "روز تعطیل"
         verbose_name_plural = "روزهای تعطیل"
+
+    def jalali_reservation_date(self):
+        jalali_date = date2jalali(self.date)
+        jalali_string = persian_date_string_convertor(str(jalali_date))
+        persian_weekday = convert_to_persian_weekday(self.date)
+        return f"{persian_weekday} {jalali_string}"

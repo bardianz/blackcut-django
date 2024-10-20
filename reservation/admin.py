@@ -1,26 +1,46 @@
 from django.contrib import admin
-from .models import Service, TimeSlot, Appointment
+from .models import Service, TimeSlot, Appointment, Dayoff
+
+
+class OffDayAdmin(admin.ModelAdmin):
+    list_display = ("jalali_reservation_date",)
+
+
+admin.site.register(Dayoff, OffDayAdmin)
+
 
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('service_name', 'is_active')
-    list_filter = ('is_active',)
-    list_editable = ('is_active',)
-    search_fields = ('service_name',)
+    list_display = ("service_name", "is_active")
+    list_filter = ("is_active",)
+    list_editable = ("is_active",)
+    search_fields = ("service_name",)
     list_per_page = 20
+
 
 class TimeSlotAdmin(admin.ModelAdmin):
-    list_display = ('start_time', 'is_active')
-    ordering = ('start_time',)
-    list_filter = ('is_active',)
-    list_editable = ('is_active',)
-    search_fields = ('start_time', 'finish_time')
+    list_display = ("start_time", "is_active")
+    ordering = ("start_time",)
+    list_filter = ("is_active",)
+    list_editable = ("is_active",)
+    search_fields = ("start_time", "finish_time")
     list_per_page = 20
 
+
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('user_identifier', 'service', 'jalali_reservation_date', 'timeslot', 'status')
-    list_filter = ('status', 'service', 'date', )
-    list_editable = ('status',)
-    search_fields = ('user__last_name', 'user__first_name')
+    list_display = (
+        "user_identifier",
+        "service",
+        "jalali_reservation_date",
+        "timeslot",
+        "status",
+    )
+    list_filter = (
+        "status",
+        "service",
+        "date",
+    )
+    list_editable = ("status",)
+    search_fields = ("user__last_name", "user__first_name")
     list_per_page = 10
 
     def user_identifier(self, obj):
@@ -32,6 +52,7 @@ class AppointmentAdmin(admin.ModelAdmin):
         return obj.jalali_reservation_date()
 
     jalali_reservation_date.short_description = "ناریخ"
+
 
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(TimeSlot, TimeSlotAdmin)
