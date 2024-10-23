@@ -9,11 +9,11 @@
 
             <div id="google-login">
 
-                <h4 class="mb-2 pb-2" dir="rtl">
-                    ورود از طریق حساب گوگل:
-                </h4>
+                <h5 class="mb-2 pb-2" dir="rtl">
+                    ورود از طریق حساب گوگل (Gmail)
+                </h5>
 
-                <div class="text-center pb-2" dir="ltr">
+                <div class="text-center" dir="ltr">
                     <!-- <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}" role="button">ادامه با گوگل</a> -->
                     <a class="" href="{% url 'social:begin' 'google-oauth2' %}" role="button">
                         <button class="gsi-material-button">
@@ -39,18 +39,13 @@
             <hr class="hr mt-4 mb-4  pb-2" />
 
 
-
-
-            <h3 class="mb-2 pb-2" dir="rtl">
+            <h5 class="mb-2 pb-2" dir="rtl">
                 ورود بدون گوگل:
-            </h3>
+            </h5>
 
 
             
-            <p class="fs-6 mb-2 pb-2" dir="rtl">
-             تاکنون حساب کاربری نساخته‌اید؟ 
-             <a class="btn btn-warning btn-sm link-underline-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url "account:register" %}"> ثبت نام </a>
-            </p>
+
 
             <form method="post">
                 {% csrf_token %}
@@ -83,13 +78,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="col text-center pb-5">
+                <div class="col text-center pb-2">
 
                     <!-- Submit button -->
                     <button data-mdb-ripple-init type="submit" class="btn btn-warning btn-block">ورود</button>
                 </div>
 
             </form>
+
+
+            <hr class="hr mt-3 mb-3" />
+
+
+            <p class="fs-6 mb-2 pb-2" dir="rtl">
+                تاکنون حساب کاربری نساخته‌اید؟ 
+                <a class="btn btn-light btn-sm link-underline-warning link-offset-2 mx-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{% url "account:register" %}"> ثبت نام </a>
+               </p>
 
 
 

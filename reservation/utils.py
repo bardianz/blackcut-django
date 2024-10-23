@@ -3,7 +3,7 @@ from .models import Appointment
 from utils.persian_weekday import convert_to_persian_weekday
 
 
-def has_exceeded_active_appointments_limit(user, limit=3):
+def has_exceeded_active_appointments_limit(user, limit=1):
     """Check if a user has exceeded the active appointments limit."""
     user_active_appointments = Appointment.objects.filter(user=user, status="active").count()
     return user_active_appointments >= limit
