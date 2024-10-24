@@ -78,7 +78,7 @@
                 <div class="col-lg-8" dir="auto">
                     <h2 class="text-white">درباره ما</h2>
                     <p class="text-white-50">
-                        {{custom_content.aboutus_text}}
+                        {{custom_content.aboutus_text|safe}}
                     </p>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     <div class="featured-text text-center text-lg-left text-black-50">
                         <h4 class="text-black-50 px-4">{{custom_content.title_1}}</h4>
                         <p class="text-black-50 mb-0">
-                            {{custom_content.content_1}}
+                            {{custom_content.content_1|safe}}
                         </p>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                             <div class="project-text w-100 my-auto text-center text-lg-left">
                                 <h4 class="text-white">{{custom_content.title_2}}</h4>
                                 <p class="mb-0 text-white-50">
-                                    {{custom_content.content_2}}
+                                    {{custom_content.content_2|safe}}
                                 </p>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                             <div class="project-text w-100 my-auto text-center text-lg-right">
                                 <h4 class="text-white">{{custom_content.title_3}}</h4>
                                 <p class="mb-0 text-white-50">
-                                    {{custom_content.content_3}}
+                                    {{custom_content.content_3|safe}}
                                 </p>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
 
                     <div class="row input-group-newsletter">
              <p class="text-light">
-                {{custom_content.content_4}}
+                {{custom_content.content_4|safe}}
              </p>
                     </div>
 
@@ -196,7 +196,7 @@
                             <h4 id="address" class="address text-uppercase m-0">Address</h4>
                             <hr class="my-4 mx-auto" />
                             <div class="">
-                                <div class="small text-black-50 py-3">{{custom_content.address_section}}</div>
+                                <div class="small text-black-50 py-3">{{custom_content.address_section|safe}}</div>
 
                                 <div class="map small text-black-50 d-flex justify-content-center">
 
@@ -220,7 +220,7 @@
                             <i class="fas fa-clock text-primary mb-2"></i>
                             <h4 class="text-uppercase m-0">ساعت کاری</h4>
                             <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50">{{custom_content.time_section}}</div>
+                            <div class="small text-black-50">{{custom_content.time_section|safe}}</div>
                         </div>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
                             <i class="fas fa-mobile-alt text-primary mb-2"></i>
                             <h4 class="text-uppercase m-0">شماره تلفن</h4>
                             <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50">{{custom_content.phone_section}}</div>
+                            <div class="small text-black-50">{{custom_content.phone_section|safe}}</div>
                         </div>
                     </div>
                 </div>

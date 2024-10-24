@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
+    'ckeditor',
+
     "social_django",
     "jalali_date", 
 
@@ -64,6 +66,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ]
 }
+
 
 
 JALALI_DATE_DEFAULTS = {
@@ -237,11 +240,15 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# STATIC_ROOT= os.path.join(BASE_DIR,'static/')
-
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "static"),
 # ]
+
+# for collectstatic:
+# import os
+# STATIC_ROOT= os.path.join(BASE_DIR,'static/')
+
+
 
 
 # STATICFILES_DIRS = [
