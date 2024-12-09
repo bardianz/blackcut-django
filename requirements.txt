@@ -20,7 +20,7 @@ python-decouple==3.8
 python3-openid==3.2.0
 requests==2.31.0
 requests-oauthlib==2.0.0
-setuptools==69.2.0
+setuptools==75.6.0
 social-auth-app-django==5.4.0
 social-auth-core==4.5.3
 sqlparse==0.5.2
