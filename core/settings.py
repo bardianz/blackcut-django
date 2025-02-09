@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "shop.apps.ShopConfig",
     "api.apps.ApiConfig",
+    "management.apps.ManagementConfig",
 
 ]
 

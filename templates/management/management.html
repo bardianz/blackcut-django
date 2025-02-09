@@ -1,0 +1,201 @@
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{% static 'blackcut.ico'%}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css"
+    integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+  <!-- <link href="{% static '/home/css/styles.css' %}" rel="stylesheet" /> -->
+  <link href="{% static '/account/css/base.css' %}" rel="stylesheet" />
+
+
+
+  <title>BlackCut</title>
+</head>
+
+<body class="bg-dark text-light">
+
+
+
+
+
+  
+
+
+
+  {% for message in messages %}
+  <div class="container">
+        <div class="d-flex justify-content-center">
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <div class="alert {{message.tags}} alert-dismissible" role="alert">
+              <div id="form_errors">
+                <strong>{{ message }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  {% endfor%}
+
+
+
+
+
+  <div class="container mt-2 pt-2">
+
+    <div class="d-flex justify-content-center">
+      <div class="col-lg-10 col-md-12 mb-4 mt-4">
+
+        <p>مدیریت نوبت ها</p>
+
+        <nav class="nav text-reset">
+            <a class="nav-link text-reset active" aria-current="page" href="#">نوبت های فعال</a>
+            <a class="nav-link text-reset disabled" href="#">نوبت های در صف پرداخت</a>
+            <a class="nav-link text-reset disabled" href="#">همه نوبت ها</a>
+          </nav>
+
+
+
+    <div class="row mt-5">
+
+      {% for i in active_reservations %}
+<div class="col">
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0 justify-content-center align-items-center">
+          <div height="150px" width="150px" class="col-md-4">
+            <img class="rounded" height="150px" width = "150px" src="{% if request.user.userprofile and request.user.userprofile.profile_picture %}{{ request.user.userprofile.profile_picture }}{% else %}https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg{% endif %}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{i.user_identifier}}</h5>
+              
+              <p class="card-text"><small class="text-body-secondary">{{i.jalali_reservation_date}} ساعت {{i.timeslot.start_time}}</small></p>
+              <p class="card-text text-body-secondary">
+
+
+                <small>
+                    <button type="button" id="make-done-btn-{{ i.id }}" class="btn btn-sm btn-info make-done-btn" data-id="{{ i.id }}">انجام شد</button>
+                    <button type="button" id="make-paid-btn-{{ i.id }}" class="btn btn-sm btn-success make-paid-btn" data-id="{{ i.id }}">پرداخت شد</button>
+                </small>
+
+          </p>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </div>
+      {% endfor %}
+    </div>
+
+      </div>
+    </div>
+  </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".make-done-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let reservationId = this.dataset.id;  // دریافت ID از data-id
+            let buttonId = this.id;  // دریافت ID دکمه
+
+            fetch("/api/make_done_appointment/", {  // مسیر API را بررسی کنید
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()  // برای امنیت لازم است
+                },
+                body: JSON.stringify({ "appointment_id": reservationId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);  // نمایش پیام موفقیت
+                    document.getElementById(buttonId).innerText = "Done ✅";  // تغییر متن دکمه
+                    document.getElementById(buttonId).disabled = true;  // غیرفعال‌سازی دکمه
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+
+    document.querySelectorAll(".make-paid-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let reservationId = this.dataset.id;
+            let buttonId = this.id;
+
+            fetch("/api/make-paid/", {  // مسیر API پرداخت را بررسی کنید
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify({ "appointment_id": reservationId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    document.getElementById(buttonId).innerText = "Paid ✅";
+                    document.getElementById(buttonId).disabled = true;
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+});
+
+// تابع دریافت CSRF Token از کوکی
+function getCSRFToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        document.cookie.split(";").forEach(cookie => {
+            let trimmed = cookie.trim();
+            if (trimmed.startsWith("csrftoken=")) {
+                cookieValue = trimmed.substring("csrftoken=".length);
+            }
+        });
+    }
+    return cookieValue;
+}
+
+</script>
+  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+    integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+    integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+    crossorigin="anonymous"></script>
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    -->
+
+  {% block jalali_js_bindings %} {% endblock%}
+
+  {% block static_js %}
+
+  {% endblock%}
+
+
+
+
+
+</body>
+
+
+
+</html>
