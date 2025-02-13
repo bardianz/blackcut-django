@@ -9,6 +9,7 @@ urlpatterns = [
     path('account/', include("account.urls")),
     path("account/", include("django.contrib.auth.urls")),
     path('reserve/', include("reservation.urls")),
+    path('manage/', include("management.urls")),
     path('api/', include("api.urls")),
     path('api-auth/', include('rest_framework.urls')),
     re_path(r'^oauth/', include('social_django.urls', namespace='social')),
