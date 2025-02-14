@@ -54,28 +54,28 @@
       <div class="col-lg-10 col-md-12 mb-4 mt-4">
 
 
-                    <button type="button" id="refresh-btn" onClick="location.reload()" class="btn btn-sm btn-warning"><i class="bi bi-bootstrap-reboot"></i></button>
+                    <button type="button" id="refresh-btn" onClick="location.reload()" class="btn btn-sm btn-warning my-3"><i class="bi bi-bootstrap-reboot"></i></button>
 
 
 
 
         <p>مدیریت نوبت ها</p>
 
-        <nav class="nav text-reset">
-            <a class="nav-link text-reset active" aria-current="page" href="#">نوبت های فعال</a>
+        <nav class="nav nav-underline text-reset">
+            <a class="nav-link text-reset btn {% if page == 'active' %} active {% endif %}" aria-current="page" href="{% url 'management:list_of_reservations' %}">نوبت های فعال</a>
+            <a class="nav-link text-reset {% if page == 'all' %} active {% endif %}" href="{% url 'management:list_of_all_reservations' %}">همه نوبت ها</a>
             <a class="nav-link text-reset disabled" href="#">نوبت های در صف پرداخت</a>
-            <a class="nav-link text-reset disabled" href="#">همه نوبت ها</a>
           </nav>
 
-
+          
 
     <div class="row mt-5">
 
       {% for i in active_reservations %}
-<div class="col">
+<div class="col-6">
       <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0 justify-content-center align-items-center">
-          <div  class="col-md-4">
+        <div class="row g-0 justify-content-center align-items-center" >
+          <div  class="col-md-4" height="150px" width = "150px" >
             <img height="150px" width = "150px" src="{% if i.user.userprofile and i.user.userprofile.profile_picture %}{{ i.user.userprofile.profile_picture }}{% else %}https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg{% endif %}" class="img-fluid rounded-start" alt="...">
           </div>
           <div class="col-md-8">
@@ -85,10 +85,20 @@
               <p class="card-text"><small class="text-body-secondary">{{i.jalali_reservation_date}} ساعت {{i.timeslot.start_time}}</small></p>
               <p class="card-text text-body-secondary">
 
-
                 <small>
-                    <button type="button" id="make-done-btn" class="btn btn-sm btn-info make-done-btn" data-id="{{ i.id }}">انجام شد</button>
-                    <button type="button" id="make-paid-btn" class="btn btn-sm btn-success make-paid-btn" data-id="{{ i.id }}">پرداخت شد</button>
+                  {% if i.status == "paid" %}
+                  <i class="bi bi-patch-check text-success"></i>
+                  پرداخت شده
+                  {% elif i.status == "done" %}
+                  <i class="bi bi-patch-check text-success"></i>
+                  انجام شده                                     
+                  <button type="button" id="make-paid-btn" class="btn btn-sm btn-success make-paid-btn" data-id="{{ i.id }}">پرداخت شد</button>
+                  {% elif i.status == "active" %}
+                  <button type="button" id="make-done-btn" class="btn btn-sm btn-info make-done-btn" data-id="{{ i.id }}">انجام شد</button>
+                  {% else %}
+                  <button type="button" id="make-done-btn" class="btn btn-sm btn-info make-done-btn" data-id="{{ i.id }}">انجام شد</button>
+                  <button type="button" id="make-paid-btn" class="btn btn-sm btn-success make-paid-btn" data-id="{{ i.id }}">پرداخت شد</button>
+                  {% endif %}                  
                 </small>
 
           </p>

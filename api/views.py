@@ -48,7 +48,6 @@ class DoneAppointments(APIView):
 
 class AllAppointments(APIView):
     def get_queryset(self):
-        current_date = date.today()
         all_reservations = Appointment.objects.exclude(status__in=["canceled"]).order_by('-date', 'timeslot__start_time')[:20]
         return all_reservations
 
