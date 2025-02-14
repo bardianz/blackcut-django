@@ -25,7 +25,7 @@
 
 
 
-  
+
 
 
 
@@ -53,6 +53,12 @@
     <div class="d-flex justify-content-center">
       <div class="col-lg-10 col-md-12 mb-4 mt-4">
 
+
+                    <button type="button" id="refresh-btn" onClick="location.reload()" class="btn btn-sm btn-warning"><i class="bi bi-bootstrap-reboot"></i></button>
+
+
+
+
         <p>مدیریت نوبت ها</p>
 
         <nav class="nav text-reset">
@@ -75,7 +81,7 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title">{{i.user_identifier}}</h5>
-              
+
               <p class="card-text"><small class="text-body-secondary">{{i.jalali_reservation_date}} ساعت {{i.timeslot.start_time}}</small></p>
               <p class="card-text text-body-secondary">
 
@@ -87,7 +93,7 @@
 
           </p>
             </div>
-    
+
           </div>
         </div>
       </div>
@@ -116,23 +122,23 @@
         }
         return cookieValue;
     }
-    
+
     const csrfToken = getCookie('csrftoken');
 
     document.querySelectorAll(".make-done-btn").forEach(button => {
         button.addEventListener("click", async function () {
             const appointmentId = this.getAttribute("data-id");
-            
+
             try {
                 const response = await fetch("/api/make_done_appointment/", {
                     method: "POST",
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/json",
                         "X-CSRFToken": csrfToken
                     },
                     body: JSON.stringify({ appointment_id: appointmentId })
                 });
-                
+
                 if (response.status === 200) {
                     alert("انجام شد!");
                     location.reload();
@@ -149,17 +155,17 @@
     document.querySelectorAll(".make-paid-btn").forEach(button => {
         button.addEventListener("click", async function () {
             const appointmentId = this.getAttribute("data-id");
-            
+
             try {
                 const response = await fetch("/api/make_paid_appointment/", {
                     method: "POST",
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/json",
                         "X-CSRFToken": csrfToken
                     },
                     body: JSON.stringify({ appointment_id: appointmentId })
                 });
-                
+
                 if (response.status === 200) {
                     alert("پرداخت شد!");
                     location.reload();
@@ -175,7 +181,7 @@
 });
 
 </script>
-  
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -186,7 +192,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
     integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
     crossorigin="anonymous"></script>
-  <!-- 
+  <!--
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     -->
