@@ -63,7 +63,7 @@
 
         <nav class="nav nav-underline text-reset">
             <a class="nav-link text-reset btn {% if page == 'active' %} active {% endif %}" aria-current="page" href="{% url 'management:list_of_reservations' %}">نوبت های فعال</a>
-            <a class="nav-link text-reset {% if page == 'all' %} active {% endif %}" href="{% url 'management:list_of_all_reservations' %}">همه نوبت ها</a>
+            <a class="nav-link text-reset px-3 {% if page == 'all' %} active {% endif %}" href="{% url 'management:list_of_all_reservations' %}">همه نوبت ها</a>
             <a class="nav-link text-reset {% if page == 'done' %} active {% endif %}" href="{% url 'management:list_of_done_reservations' %}">نوبت های در صف پرداخت</a>
           </nav>
 
